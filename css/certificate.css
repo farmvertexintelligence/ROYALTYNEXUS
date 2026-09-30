@@ -1,0 +1,54 @@
+/* Certificate of Participation — shared by admin, certificate and verify pages. */
+.certificate {
+  --c-green: #1d3a2a;
+  --c-gold: #b8903f;
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 1.414 / 1;
+  margin: 0 auto;
+  padding: 2.4%;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(143, 181, 138, .18), transparent 40%),
+    radial-gradient(circle at 88% 85%, rgba(201, 165, 90, .16), transparent 40%),
+    #fdfaf2;
+  color: #1b2a21;
+  font-family: 'Inter', system-ui, sans-serif;
+  container-type: inline-size;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .45);
+}
+.cert-border {
+  position: relative;
+  height: 100%;
+  border: 2px solid var(--c-gold);
+  outline: 1px solid var(--c-gold);
+  outline-offset: -8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4% 8%;
+  overflow: hidden;
+}
+.cert-leaf { position: absolute; width: 30%; right: -6%; bottom: -10%; color: var(--c-green); opacity: .16; pointer-events: none; }
+.cert-org { font-size: 1.7cqi; letter-spacing: .32em; text-transform: uppercase; color: var(--c-gold); font-weight: 600; margin: 0 0 1.6cqi; }
+.cert-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 5.4cqi; font-weight: 700; color: var(--c-green); margin: 0 0 1.2cqi; line-height: 1.05; }
+.cert-sub { font-size: 1.6cqi; color: #5b6a60; margin: 0 0 1cqi; }
+.cert-name { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 6cqi; font-weight: 600; margin: 0 0 1.2cqi; padding: 0 4cqi .4cqi; border-bottom: 1px solid rgba(184, 144, 63, .6); line-height: 1.1; }
+.cert-body { font-size: 1.75cqi; line-height: 1.6; max-width: 78%; color: #34453a; margin: 0 0 3cqi; }
+.cert-foot { display: grid; grid-template-columns: 1fr auto 1fr; gap: 5cqi; align-items: end; width: 86%; }
+.cert-foot > div:not(.cert-seal) { display: flex; flex-direction: column; align-items: center; font-size: 1.4cqi; color: #5b6a60; gap: .8cqi; }
+.cert-line { display: block; width: 100%; height: 1px; background: #34453a; }
+.cert-seal { width: 10cqi; height: 10cqi; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle, #e2c98f, #b8903f); box-shadow: 0 0 0 .6cqi #fdfaf2, 0 0 0 .8cqi #b8903f; }
+.cert-seal span { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 3.4cqi; color: #fdfaf2; }
+.cert-id { position: absolute; bottom: 3%; left: 0; right: 0; font-size: 1.15cqi; color: #7a877e; margin: 0; letter-spacing: .04em; }
+.cert-void { position: absolute; inset: 0; display: grid; place-items: center; font: 800 12cqi/1 'Inter', sans-serif; color: rgba(192, 80, 58, .28); transform: rotate(-18deg); letter-spacing: .1em; pointer-events: none; }
+
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+  body * { visibility: hidden !important; }
+  .print-area, .print-area * { visibility: visible !important; }
+  .print-area { position: fixed; inset: 0; display: grid; place-items: center; background: #fff; }
+  .print-area .certificate { width: 297mm; max-width: none; height: 210mm; aspect-ratio: auto; box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

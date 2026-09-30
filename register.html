@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campaign Registration — Royalty Nexus</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-nav solid" id="siteNav">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="34" height="34"><span>Royalty <em>Nexus</em></span></a>
+    <nav class="nav-links simple">
+      <a href="index.html#campaigns">All campaigns</a>
+    </nav>
+  </header>
+
+  <section class="page-banner">
+    <div class="scene scene-morning" aria-hidden="true">
+      <div class="sky"></div>
+      <div class="sun" data-speed="-0.2"><span></span></div>
+      <svg class="layer layer-far" data-speed="0.4" viewBox="0 0 1440 600" preserveAspectRatio="none"><path fill="#c3cfd9" d="M0 600V330l90-40 80 20 90-90 80 40 80-80 80 60 80-40 80 70 100-120 100 80 80-30 80 60 100-90 80 60 90-30 80 50 70-20v370z"/></svg>
+      <svg class="layer layer-mid" data-speed="0.25" viewBox="0 0 1440 600" preserveAspectRatio="none"><path fill="#8aa59f" d="M0 600V380q120-80 220-40t200-20q100-60 220 10t220-30q120-60 240 20t220-20q70-10 120 20v280z"/></svg>
+      <svg class="layer layer-hills" data-speed="0.1" viewBox="0 0 1440 600" preserveAspectRatio="none"><path fill="#2d5a40" d="M0 600V440c200-50 320 20 520-20s340-40 480 10 300-30 440 0v170z"/></svg>
+    </div>
+    <div class="page-banner-title">
+      <p class="eyebrow" style="color:#fff">Public registration</p>
+      <h1>Register for a campaign</h1>
+    </div>
+  </section>
+
+  <main class="page-body">
+    <div class="container layout-2">
+      <div class="card" id="formCard">
+        <form id="regForm" novalidate>
+          <label>Campaign
+            <select name="campaignId" id="campaignSelect" required></select>
+          </label>
+
+          <div id="participationWrap">
+            <label style="margin-bottom:0">How will you participate?</label>
+            <div class="radio-group" id="participation"></div>
+          </div>
+
+          <div class="field-row">
+            <label>Full name (as it should appear on your certificate)<input name="name" required autocomplete="name" maxlength="80"></label>
+            <label>Email<input name="email" type="email" required autocomplete="email"></label>
+          </div>
+          <div class="field-row">
+            <label>Mobile number<input name="phone" type="tel" required autocomplete="tel" pattern="[0-9 +\(\)\-]{7,}"></label>
+            <label>City / Town<input name="city" required autocomplete="address-level2"></label>
+          </div>
+          <label>Age group
+            <select name="ageGroup" required>
+              <option value="">Select</option>
+              <option>Under 18 (guardian consent required)</option>
+              <option>18–25</option>
+              <option>26–40</option>
+              <option>41–60</option>
+              <option>60+</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" name="consent" required> I agree to follow the campaign safety guidelines and consent to the Foundation Trust contacting me about this campaign.</label>
+          <button class="btn btn-leaf" type="submit">Complete registration</button>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <aside class="card summary" id="summary" aria-live="polite"></aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" style="padding-top:30px">
+    <p class="container copyright" style="margin-top:0;border:0">© <span id="year"></span> Royalty Nexus Foundation Trust · <a href="verify.html">Verify a certificate</a> · <a href="admin/login.html">Admin</a></p>
+  </footer>
+
+  <script src="js/store.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

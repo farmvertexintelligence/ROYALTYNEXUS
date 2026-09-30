@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Royalty Nexus — Foundation Trust & Private Wealth</title>
+  <meta name="description" content="Royalty Nexus Foundation Trust runs public environmental campaigns online and offline. Royalty Nexus Private Wealth offers discreet wealth management for families and founders.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home">
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+  <header class="site-nav" id="siteNav">
+    <a class="brand" href="#top" aria-label="Royalty Nexus home">
+      <img src="assets/favicon.svg" alt="" width="34" height="34">
+      <span>Royalty <em>Nexus</em></span>
+    </a>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#foundation">Foundation</a>
+      <a href="#campaigns">Campaigns</a>
+      <a href="#participate">Participate</a>
+      <a href="verify.html">Verify Certificate</a>
+      <a href="#wealth" class="nav-wealth">Private Wealth</a>
+      <a href="register.html" class="btn btn-sm btn-leaf">Register</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO: layered morning landscape ============ -->
+  <section class="hero" id="top">
+    <div class="scene scene-morning" aria-hidden="true">
+      <div class="sky"></div>
+      <div class="sun" data-speed="-0.35"><span></span></div>
+      <div class="rays" data-speed="-0.2"></div>
+      <div class="clouds" data-speed="0.12">
+        <svg class="cloud c1" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
+        <svg class="cloud c2" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
+        <svg class="cloud c3" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
+      </div>
+      <div class="birds">
+        <svg class="bird b1" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
+        <svg class="bird b2" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
+        <svg class="bird b3" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
+      </div>
+
+      <svg class="layer layer-far" data-speed="0.55" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9fb3c6"/><stop offset="1" stop-color="#c9d4da"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#gFar)" d="M0 600V330l90-40 80 20 90-90 80 40 80-80 80 60 80-40 80 70 100-120 100 80 80-30 80 60 100-90 80 60 90-30 80 50 70-20v370z"/>
+        <path fill="#fff" opacity=".55" d="M760 150l-34 42 20-6 14 14 14-16 24 8zM420 180l-26 32 16-4 10 10 12-12 18 4zM1120 170l-30 34 18-4 12 12 12-12 20 4z"/>
+      </svg>
+
+      <div class="mist mist-1" data-speed="0.45"></div>
+
+      <svg class="layer layer-mid" data-speed="0.4" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7f9c98"/><stop offset="1" stop-color="#9fb3a8"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#gMid)" d="M0 600V380q120-80 220-40t200-20q100-60 220 10t220-30q120-60 240 20t220-20q70-10 120 20v280z"/>
+      </svg>
+
+      <svg class="layer layer-hills" data-speed="0.25" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <path fill="#4f7a5a" d="M0 600V440c200-50 320 20 520-20s340-40 480 10 300-30 440 0v170z"/>
+        <g id="treesHills" fill="#3a6448"></g>
+      </svg>
+
+      <div class="mist mist-2" data-speed="0.18"></div>
+
+      <svg class="layer layer-front" data-speed="0.06" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <g id="treesFront" fill="#12261b"></g>
+        <path fill="#12261b" d="M0 600v-70q360-50 720-10t720-30v110z"/>
+      </svg>
+    </div>
+
+    <div class="hero-content" data-hero-fade>
+      <p class="eyebrow">Royalty Nexus Foundation Trust</p>
+      <h1>Rooted in nature.<br><span>Growing with purpose.</span></h1>
+      <p class="lead">Public environmental campaigns — in the field and online — that restore forests, rivers and coastlines, powered by a community of volunteers and the stewardship of Royalty Nexus.</p>
+      <div class="hero-cta">
+        <a href="#campaigns" class="btn btn-leaf">Join a campaign</a>
+        <a href="#wealth" class="btn btn-ghost">Private wealth management</a>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#foundation" aria-label="Scroll to explore"><span></span></a>
+  </section>
+
+  <!-- ============ FOUNDATION ============ -->
+  <section class="section forest-floor" id="foundation">
+    <div class="fireflies" aria-hidden="true"></div>
+    <div class="container narrow reveal">
+      <p class="eyebrow light">Our foundation</p>
+      <h2 class="display">A public trust for the living world.</h2>
+      <p class="lead light">The Royalty Nexus Foundation Trust is a public charitable trust. Every campaign is open to all — students, families, professionals and companies — and free to join. We work on the ground in forests, rivers and coasts, and online through live classes and citizen-science programmes that anyone can join from home.</p>
+    </div>
+    <div class="container stats">
+      <div class="stat reveal"><strong data-count="1240000">0</strong><span>native trees planted</span></div>
+      <div class="stat reveal"><strong data-count="38500">0</strong><span>volunteers mobilised</span></div>
+      <div class="stat reveal"><strong data-count="212">0</strong><span>kilometres of river restored</span></div>
+      <div class="stat reveal"><strong data-count="0" data-live="certificates">0</strong><span>certificates issued this season</span></div>
+    </div>
+  </section>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="section paper" id="pillars">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">What we restore</p>
+        <h2 class="display">Four pillars of environmental action</h2>
+      </div>
+      <div class="pillars">
+        <article class="pillar reveal">
+          <div class="pillar-icon forest"><svg viewBox="0 0 48 48"><path d="M24 4l10 14h-6l9 12h-7l8 10H10l8-10h-7l9-12h-6z"/><rect x="22" y="40" width="4" height="6"/></svg></div>
+          <h3>Reforestation</h3>
+          <p>Native-species planting, seed banks and multi-year survival monitoring of every sapling.</p>
+        </article>
+        <article class="pillar reveal">
+          <div class="pillar-icon water"><svg viewBox="0 0 48 48"><path d="M24 4C16 16 10 23 10 30a14 14 0 0028 0c0-7-6-14-14-26z"/></svg></div>
+          <h3>Clean Water</h3>
+          <p>River clean-ups, wetland revival and citizen water-quality testing along urban rivers.</p>
+        </article>
+        <article class="pillar reveal">
+          <div class="pillar-icon wildlife"><svg viewBox="0 0 48 48"><path d="M8 30c4-12 14-18 26-16 4 1 7 4 8 8-5-2-9-1-12 2 5 1 8 4 9 8-6-3-12-3-18 0-4 2-9 1-13-2z"/><circle cx="36" cy="18" r="1.8" fill="#fff"/></svg></div>
+          <h3>Wildlife & Coasts</h3>
+          <p>Mangrove belts, habitat corridors and nesting-site protection with local communities.</p>
+        </article>
+        <article class="pillar reveal">
+          <div class="pillar-icon education"><svg viewBox="0 0 48 48"><path d="M24 8L2 18l22 10 18-8v12h4V18z"/><path d="M12 25v9c0 3 6 6 12 6s12-3 12-6v-9l-12 5z"/></svg></div>
+          <h3>Climate Education</h3>
+          <p>Free online masterclasses, school programmes and practical toolkits for climate action.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAMPAIGNS (dynamic) ============ -->
+  <section class="section meadow" id="campaigns">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Open for registration</p>
+        <h2 class="display">Upcoming campaigns</h2>
+        <p class="muted">Every campaign is public and free. Join in person, online, or both.</p>
+      </div>
+      <div class="filter-chips reveal" role="tablist" aria-label="Filter campaigns">
+        <button class="chip is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="chip" data-filter="offline" role="tab" aria-selected="false">In the field</button>
+        <button class="chip" data-filter="online" role="tab" aria-selected="false">Online</button>
+        <button class="chip" data-filter="hybrid" role="tab" aria-selected="false">Hybrid</button>
+      </div>
+      <div class="campaign-grid" id="campaignGrid">
+        <p class="muted">Loading campaigns…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTICIPATE ============ -->
+  <section class="section paper" id="participate">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">How to take part</p>
+        <h2 class="display">Online or in the field — every hour counts</h2>
+      </div>
+      <div class="modes">
+        <div class="mode-card reveal">
+          <span class="tag tag-offline">Offline</span>
+          <h3>In the field</h3>
+          <p>Plant, clean and restore alongside our field teams. Tools, safety briefing, refreshments and transport from city pickup points are provided. Walk-in registrations are welcome at the base camp desk.</p>
+        </div>
+        <div class="mode-card reveal">
+          <span class="tag tag-online">Online</span>
+          <h3>From anywhere</h3>
+          <p>Join live masterclasses, citizen-science labs and mapping sprints. Your joining link is shared after registration and attendance is recorded automatically.</p>
+        </div>
+      </div>
+      <ol class="steps">
+        <li class="reveal"><span>1</span><h4>Register</h4><p>Pick a campaign and register in under a minute. You get a registration ID instantly.</p></li>
+        <li class="reveal"><span>2</span><h4>Participate</h4><p>Show your registration ID at the field desk, or join through your online link.</p></li>
+        <li class="reveal"><span>3</span><h4>Get certified</h4><p>Receive a verifiable Certificate of Participation from the Foundation Trust.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ VERIFY BAND ============ -->
+  <section class="verify-band">
+    <div class="container verify-inner reveal">
+      <div>
+        <h3>Verify a certificate</h3>
+        <p>Employers and schools can confirm any Royalty Nexus certificate instantly.</p>
+      </div>
+      <form class="verify-form" action="verify.html" method="get">
+        <label class="sr-only" for="certIdHome">Certificate ID</label>
+        <input id="certIdHome" name="id" placeholder="e.g. RN-2026-7K3PQA" required>
+        <button class="btn btn-leaf" type="submit">Verify</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ SUNSET LAKE SCENE ============ -->
+  <section class="scene-band" aria-label="Sunset over the lake">
+    <div class="scene scene-sunset" aria-hidden="true">
+      <div class="sky"></div>
+      <div class="sun" data-speed="0.25"><span></span></div>
+      <svg class="layer" data-speed="0.3" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <path fill="#6b4a63" d="M0 600V360l120-50 110 30 140-110 120 70 110-40 150 90 140-120 120 70 130-30 130 60 100-20 100 30v220z"/>
+      </svg>
+      <svg class="layer" data-speed="0.18" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <path fill="#3e2f47" d="M0 600V420q160-60 300-20t260-30q140-30 280 30t300-10q180-50 300 10v200z"/>
+        <g id="treesSunset" fill="#2a2135"></g>
+      </svg>
+      <div class="lake" data-speed="0.05"><span class="shimmer"></span></div>
+      <svg class="layer layer-reeds" data-speed="-0.04" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <g id="reeds" stroke="#140f1c" stroke-width="3" fill="none" stroke-linecap="round"></g>
+      </svg>
+    </div>
+    <blockquote class="scene-quote reveal">
+      <p>“We do not inherit the earth from our ancestors; we borrow it from our children.”</p>
+      <cite>— The principle behind every trust we build</cite>
+    </blockquote>
+  </section>
+
+  <!-- ============ PRIVATE WEALTH ============ -->
+  <section class="section wealth" id="wealth">
+    <div class="stars" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow gold">Royalty Nexus Private Wealth</p>
+        <h2 class="display">Stewardship for generations.</h2>
+        <p class="lead light">Royalty Nexus is a private wealth management company serving families, founders and institutions. We protect and grow capital with the same long horizon we bring to our forests — and a share of our advisory fees endows the Foundation Trust.</p>
+      </div>
+      <div class="services">
+        <article class="service reveal"><span class="service-no">01</span><h3>Wealth Planning</h3><p>Goal-based financial planning, liquidity strategy and cash-flow structuring for complex balance sheets.</p></article>
+        <article class="service reveal"><span class="service-no">02</span><h3>Investment Management</h3><p>Discretionary and advisory portfolios across public markets, fixed income and alternatives.</p></article>
+        <article class="service reveal"><span class="service-no">03</span><h3>Family Office</h3><p>Consolidated reporting, governance, next-generation education and concierge administration.</p></article>
+        <article class="service reveal"><span class="service-no">04</span><h3>Estate & Trust Structuring</h3><p>Succession planning and trust administration with your legal and tax advisers.</p></article>
+        <article class="service reveal"><span class="service-no">05</span><h3>Impact & ESG Investing</h3><p>Portfolios aligned with climate and sustainability goals, with transparent impact reporting.</p></article>
+        <article class="service reveal"><span class="service-no">06</span><h3>Philanthropy Advisory</h3><p>Design your own giving vehicle or partner directly with the Foundation Trust’s campaigns.</p></article>
+      </div>
+
+      <div class="wealth-split">
+        <div class="principles reveal">
+          <h3>Our principles</h3>
+          <ul>
+            <li><strong>Discretion.</strong> Client affairs are handled by a dedicated relationship team under strict confidentiality.</li>
+            <li><strong>Alignment.</strong> Transparent fees and no hidden product commissions.</li>
+            <li><strong>Patience.</strong> Decisions measured in decades, not quarters.</li>
+            <li><strong>Purpose.</strong> Every mandate contributes to environmental restoration.</li>
+          </ul>
+          <p class="fine">Investments carry risk, including loss of capital. Past performance is not a reliable indicator of future results. Services are subject to eligibility and applicable regulation.</p>
+        </div>
+        <form class="enquiry-form reveal" id="enquiryForm" novalidate>
+          <h3>Request a private consultation</h3>
+          <p class="muted light">A relationship director will contact you within two business days.</p>
+          <div class="field-row">
+            <label>Full name<input name="name" required autocomplete="name"></label>
+            <label>Email<input name="email" type="email" required autocomplete="email"></label>
+          </div>
+          <div class="field-row">
+            <label>Phone<input name="phone" type="tel" autocomplete="tel"></label>
+            <label>Investable assets
+              <select name="assets" required>
+                <option value="">Select a range</option>
+                <option>Up to 1 Cr / $120k</option>
+                <option>1–10 Cr / $120k–1.2M</option>
+                <option>10–50 Cr / $1.2M–6M</option>
+                <option>50 Cr+ / $6M+</option>
+                <option>Institution / Endowment</option>
+              </select>
+            </label>
+          </div>
+          <label>Area of interest
+            <select name="interest">
+              <option>Wealth Planning</option>
+              <option>Investment Management</option>
+              <option>Family Office</option>
+              <option>Estate & Trust Structuring</option>
+              <option>Impact & ESG Investing</option>
+              <option>Philanthropy Advisory</option>
+            </select>
+          </label>
+          <label>Message (optional)<textarea name="message" rows="3"></textarea></label>
+          <label class="check"><input type="checkbox" name="consent" required> I agree to be contacted by Royalty Nexus about my enquiry.</label>
+          <button class="btn btn-gold" type="submit">Send enquiry</button>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand" href="#top"><img src="assets/favicon.svg" alt="" width="30" height="30"><span>Royalty <em>Nexus</em></span></a>
+        <p class="muted light">Royalty Nexus Foundation Trust — a public charitable trust for environmental restoration.<br>Royalty Nexus Private Wealth — private wealth management.</p>
+      </div>
+      <div>
+        <h4>Foundation</h4>
+        <a href="#campaigns">Campaigns</a>
+        <a href="register.html">Register</a>
+        <a href="verify.html">Verify certificate</a>
+      </div>
+      <div>
+        <h4>Private Wealth</h4>
+        <a href="#wealth">Services</a>
+        <a href="#enquiryForm">Private consultation</a>
+      </div>
+      <div>
+        <h4>Staff</h4>
+        <a href="admin/login.html">Admin login</a>
+      </div>
+    </div>
+    <p class="container copyright">© <span id="year"></span> Royalty Nexus. All rights reserved.</p>
+  </footer>
+
+  <script src="js/store.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

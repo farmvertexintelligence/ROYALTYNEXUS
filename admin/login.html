@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin Login — Royalty Nexus</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="login-page">
+  <div class="scene scene-sunset" aria-hidden="true">
+    <div class="sky"></div>
+    <div class="sun"><span></span></div>
+    <svg class="layer" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice"><path fill="#6b4a63" d="M0 600V360l120-50 110 30 140-110 120 70 110-40 150 90 140-120 120 70 130-30 130 60 100-20 100 30v220z"/></svg>
+    <svg class="layer" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice"><path fill="#3e2f47" d="M0 600V420q160-60 300-20t260-30q140-30 280 30t300-10q180-50 300 10v200z"/><g id="treesSunset" fill="#2a2135"></g></svg>
+    <div class="lake"><span class="shimmer"></span></div>
+  </div>
+
+  <main class="login-wrap">
+    <form class="login-card" id="loginForm" novalidate>
+      <a class="brand" href="../index.html"><img src="../assets/favicon.svg" alt="" width="40" height="40"><span>Royalty <em>Nexus</em></span></a>
+      <h1>Administrator sign in</h1>
+      <p class="muted">Foundation Trust campaign console</p>
+      <label>Email<input name="email" type="email" required autocomplete="username"></label>
+      <label>Password
+        <span class="pw-wrap">
+          <input name="password" type="password" required autocomplete="current-password" id="pw">
+          <button type="button" class="pw-toggle" aria-label="Show password" aria-pressed="false">Show</button>
+        </span>
+      </label>
+      <button class="btn btn-leaf btn-block" type="submit">Sign in</button>
+      <p class="form-msg" role="alert"></p>
+      <details class="demo-note">
+        <summary>First time here?</summary>
+        <p>Default account: <code>admin@royaltynexus.org</code> / <code>RoyalNexus@2026</code>. Change it immediately under <em>Settings</em> after signing in.</p>
+      </details>
+      <a class="back-link" href="../index.html">← Back to website</a>
+    </form>
+  </main>
+
+  <script src="../js/store.js"></script>
+  <script src="../js/scene.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('loginForm');
+      const msg = form.querySelector('.form-msg');
+      const pw = document.getElementById('pw');
+      const toggle = form.querySelector('.pw-toggle');
+      let attempts = 0;
+
+      toggle.addEventListener('click', function () {
+        const show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        toggle.textContent = show ? 'Hide' : 'Show';
+        toggle.setAttribute('aria-pressed', String(show));
+      });
+
+      RN.ready.then(function () {
+        if (RN.session()) location.replace('dashboard.html');
+      });
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          msg.textContent = 'Enter your email and password.';
+          return;
+        }
+        if (attempts >= 5) {
+          msg.textContent = 'Too many attempts. Please wait 30 seconds.';
+          return;
+        }
+        await RN.ready;
+        const ok = await RN.login(form.email.value, form.password.value);
+        if (ok) {
+          location.replace('dashboard.html');
+        } else {
+          attempts++;
+          msg.textContent = 'Incorrect email or password.';
+          if (attempts >= 5) setTimeout(function () { attempts = 0; msg.textContent = ''; }, 30000);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
