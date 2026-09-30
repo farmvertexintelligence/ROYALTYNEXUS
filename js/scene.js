@@ -102,6 +102,18 @@
   sprinkle('.fireflies', 34, 'firefly', 31);
   sprinkle('.stars', 90, 'star', 37);
 
+  // ---- Real photography ----
+  // Each .photo[data-photo] is tried; if the file loads, the scene switches
+  // to the photo and the drawn landscape is hidden. If not, the drawing stays.
+  document.querySelectorAll('.scene .photo[data-photo]').forEach(ph => {
+    const img = new Image();
+    img.onload = () => {
+      ph.style.backgroundImage = 'url("' + ph.dataset.photo + '")';
+      ph.closest('.scene').classList.add('has-photo');
+    };
+    img.src = ph.dataset.photo;
+  });
+
   // ---- Scroll effects ----
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const layers = Array.from(document.querySelectorAll('[data-speed]')).map(el => ({

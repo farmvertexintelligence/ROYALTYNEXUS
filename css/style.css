@@ -489,3 +489,31 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--l
 
 /* Inner-page nav: a single link, no mobile overlay */
 .nav-links.simple { position: static; opacity: 1; pointer-events: auto; flex-direction: row; background: none; }
+
+/* =========================================================
+   Real photography (assets/photos/*) with drawn fallback
+   ========================================================= */
+.scene .photo {
+  position: absolute; left: 0; right: 0; top: -12%; height: 124%;
+  background: center / cover no-repeat;
+  opacity: 0; transition: opacity 1.4s ease;
+  will-change: transform;
+}
+.scene.has-photo .photo { opacity: 1; animation: kenburns 40s ease-in-out infinite alternate; }
+@keyframes kenburns { from { scale: 1.02; } to { scale: 1.12; } }
+.scene.has-photo > .sky, .scene.has-photo > .sun, .scene.has-photo > .clouds,
+.scene.has-photo > .layer, .scene.has-photo > .lake { display: none; }
+/* Keep the atmosphere on top of the photo */
+.scene.has-photo .mist-1 { opacity: .55; }
+.scene.has-photo .mist-2 { opacity: .7; }
+.scene.has-photo .rays { left: 70%; top: 10%; opacity: .6; mix-blend-mode: screen; }
+.scene.has-photo .bird { fill: #1a2620; }
+.scene-morning.has-photo::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10, 24, 16, .35) 0%, rgba(10, 24, 16, .05) 35%, rgba(18, 38, 27, .2) 70%, var(--forest-800) 100%);
+}
+.scene-sunset.has-photo::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(20, 18, 32, .55) 0%, rgba(20, 18, 32, .15) 40%, rgba(20, 18, 32, .35) 75%, #141220 100%);
+}
+.page-banner .scene-morning.has-photo::after { background: linear-gradient(180deg, rgba(10, 24, 16, .55), rgba(10, 24, 16, .35)); }

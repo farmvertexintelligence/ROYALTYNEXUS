@@ -55,4 +55,8 @@ js/         store.js (data layer), scene.js (landscape + parallax),
 assets/     favicon.svg
 ```
 
+## Real forest photography
+
+Put photos in `assets/photos/` (`forest-hero.jpg`, `forest-lake.jpg`, `forest-canopy.jpg`) and each scene switches from the drawn landscape to the photo, with parallax, a slow zoom, mist and light rays on top. Until a photo is there, that scene keeps the drawing. See `assets/photos/README.md` for which photo goes where.
+
 Motion is turned off automatically for visitors who have `prefers-reduced-motion` set.
