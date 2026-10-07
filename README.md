@@ -1,6 +1,6 @@
 # Royalty Nexus
 
-Website for **Royalty Nexus Foundation Trust**, a public trust that runs environmental campaigns online and in the field, and for **Royalty Nexus Private Wealth**, its private wealth management arm.
+Website for **RoyaltyNexus Foundation**, a global non-profit that stewards private wealth through endowed funds and grants their returns to restore the environment and help communities grow. It also runs environmental campaigns online and in the field, with verifiable volunteer certificates. The marketing strategy and the rules the site follows are in [`docs/MARKETING.md`](docs/MARKETING.md).
 
 It's plain HTML, CSS and JavaScript. There's no build step and no dependencies.
 
@@ -8,7 +8,8 @@ It's plain HTML, CSS and JavaScript. There's no build step and no dependencies.
 
 | Page | What it does |
 |---|---|
-| `index.html` | Homepage for the foundation: mission and three pillars, the four-step wealth stewardship process, programmes, 2030 targets, governance rules, ways to give (with links to campaign registration) and a contact form. Contact form messages are saved as **Wealth enquiries** in the admin console. It uses a glassmorphism design, and all its styles and scripts are inline in the file. |
+| `index.html` | Homepage, built on the strategy in [`docs/MARKETING.md`](docs/MARKETING.md): turning globe hero, a path for each audience (families, donors, companies, volunteers), mission, wealth stewardship steps, spending policy chart and 2030 targets, global programmes, governance and published documents, the Founding Circle, FAQ, a contact form with consent, newsletter sign-up and legal and fraud notices. Contact and newsletter entries appear under **Wealth enquiries** in the admin console. Styles and scripts are inline. |
+| `privacy.html` | Privacy policy and donor rights (a draft to be reviewed by a lawyer). |
 | `register.html` | Public campaign registration. Picks the campaign from `?c=<id>`, offers in-person or online depending on the campaign, checks capacity and duplicate emails, and issues a registration ID. |
 | `verify.html` | Public certificate check (`?id=RN-2026-XXXXXX`). Shows the certificate and whether it's valid or revoked, and it can be printed or saved as a PDF. |
 | `admin/login.html` | Administrator sign-in. |
