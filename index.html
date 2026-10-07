@@ -1,330 +1,487 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Royalty Nexus — Foundation Trust & Private Wealth</title>
-  <meta name="description" content="Royalty Nexus Foundation Trust runs public environmental campaigns online and offline. Royalty Nexus Private Wealth offers discreet wealth management for families and founders.">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RoyaltyNexus Foundation</title>
+<meta name="description" content="RoyaltyNexus Foundation is a non-profit that stewards private wealth for lasting public good: restoring forests, rivers and coasts, and helping communities grow within the planet's limits.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an annual-ring motif. A long-horizon ledger of land, water and capital, read in growth rings. */
+:root {
+  --bg: #f2f4ef;
+  --surface: #fbfcf9;
+  --ink: #13261f;
+  --muted: #56675e;
+  --line: #d3dbd2;
+  --canopy: #1d5a47;
+  --canopy-soft: #dbe8e0;
+  --gold: #a8741a;
+  --gold-soft: #f3e6cc;
+  --on-dark: #eef3ee;
+  --deep: #0f221b;
+
+  --display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --s-1: .8125rem; --s0: 1rem; --s1: 1.25rem; --s2: 1.6rem; --s3: 2.2rem; --s4: clamp(2.4rem, 6vw, 4.4rem);
+  --wrap: 72rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1915; --surface: #14231d; --ink: #e6eee8; --muted: #9db0a5; --line: #26392f;
+    --canopy: #6cc2a1; --canopy-soft: #1a3329; --gold: #e0b25a; --gold-soft: #33291a;
+    --on-dark: #eef3ee; --deep: #08120e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1915; --surface: #14231d; --ink: #e6eee8; --muted: #9db0a5; --line: #26392f;
+  --canopy: #6cc2a1; --canopy-soft: #1a3329; --gold: #e0b25a; --gold-soft: #33291a;
+  --on-dark: #eef3ee; --deep: #08120e; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--s0)/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+a { color: var(--canopy); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h2 { font-size: var(--s3); }
+h3 { font-size: var(--s1); font-weight: 500; }
+p { margin: 0; max-width: 65ch; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: 20px; }
+.eyebrow { font: 500 var(--s-1)/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.lede { font-size: var(--s1); color: var(--muted); }
+section { padding-block: clamp(3.5rem, 8vw, 6rem); }
+.sec-head { display: grid; gap: .9rem; margin-bottom: 2.6rem; max-width: 46rem; }
+
+/* Header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .85rem; }
+.brand { display: flex; align-items: center; gap: .6rem; color: var(--ink); text-decoration: none; font-family: var(--display); font-size: 1.3rem; }
+.brand svg { width: 30px; height: 30px; flex: none; }
+.brand small { display: block; font: 500 .62rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.nav { display: flex; align-items: center; gap: 1.4rem; }
+.nav a { color: var(--ink); text-decoration: none; font-size: .92rem; }
+.nav a:hover { color: var(--canopy); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.2rem; border-radius: 999px; font: 600 .92rem/1 var(--body); text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, background .15s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--canopy); color: var(--bg); }
+.btn-ghost { border-color: var(--line); color: var(--ink); background: transparent; }
+.nav .btn-primary { color: var(--bg); }
+.menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; padding: .45rem .6rem; color: var(--ink); font: 500 .85rem var(--body); }
+@media (max-width: 860px) {
+  .menu-btn { display: block; }
+  .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem 20px 1.5rem; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .nav.open { display: flex; }
+}
+
+/* Hero */
+.hero { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(3rem, 7vw, 5rem); }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.hero h1 { font-size: var(--s4); }
+.hero h1 em { font-style: italic; color: var(--canopy); }
+.hero-copy { display: grid; gap: 1.5rem; min-width: 0; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+.rings { margin: 0; display: grid; gap: .75rem; max-width: 100%; }
+.rings canvas { width: 100%; aspect-ratio: 1; height: auto; display: block; }
+.rings figcaption { font: 400 .75rem/1.4 var(--mono); color: var(--muted); text-align: center; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } .rings { max-width: 26rem; margin-inline: auto; width: 100%; } }
+
+/* Pillars */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.pillar { padding: 2rem 1.8rem 2.2rem 0; display: grid; gap: .9rem; align-content: start; min-width: 0; }
+.pillar + .pillar { padding-left: 1.8rem; border-left: 1px solid var(--line); }
+.pillar .tag { font: 500 var(--s-1) var(--mono); color: var(--canopy); }
+.pillar ul { margin: 0; padding-left: 1.1rem; color: var(--muted); display: grid; gap: .3rem; font-size: .95rem; }
+@media (max-width: 860px) {
+  .pillars { grid-template-columns: 1fr; }
+  .pillar, .pillar + .pillar { padding: 1.8rem 0; border-left: 0; border-bottom: 1px solid var(--line); }
+}
+
+/* Stewardship flow (a real sequence) */
+.dark { background: var(--deep); color: var(--on-dark); }
+.dark .lede { color: color-mix(in srgb, var(--on-dark) 72%, transparent); }
+.dark .eyebrow { color: #e0b25a; }
+.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; counter-reset: step; }
+.flow li { counter-increment: step; display: grid; gap: .7rem; align-content: start; padding-top: 1.2rem; border-top: 1px solid color-mix(in srgb, var(--on-dark) 25%, transparent); min-width: 0; }
+.flow li::before { content: "Step " counter(step); font: 500 var(--s-1) var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #e0b25a; }
+.flow h3 { color: var(--on-dark); }
+.flow p { color: color-mix(in srgb, var(--on-dark) 72%, transparent); font-size: .95rem; }
+.policy { margin-top: 3rem; display: flex; flex-wrap: wrap; gap: .6rem; }
+.policy span { font: 400 .8rem var(--mono); padding: .45rem .8rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--on-dark) 25%, transparent); color: color-mix(in srgb, var(--on-dark) 85%, transparent); }
+@media (max-width: 860px) { .flow { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .flow { grid-template-columns: 1fr; } }
+
+/* Programmes */
+.programs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.program { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem; display: grid; gap: .75rem; align-content: start; min-width: 0; }
+.program .where { font: 400 .78rem var(--mono); color: var(--muted); }
+.program p { color: var(--muted); font-size: .95rem; }
+.program .metric { margin-top: .4rem; padding-top: .8rem; border-top: 1px dashed var(--line); font: 500 .85rem var(--mono); color: var(--canopy); }
+@media (max-width: 960px) { .programs { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .programs { grid-template-columns: 1fr; } }
+
+/* Commitments */
+.targets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.target { display: grid; gap: .4rem; align-content: start; min-width: 0; }
+.target b { font: 400 clamp(2rem, 4.5vw, 3rem)/1 var(--display); color: var(--canopy); font-variant-numeric: tabular-nums; }
+.target span { color: var(--muted); font-size: .92rem; }
+.bar { height: 6px; border-radius: 999px; background: var(--canopy-soft); overflow: hidden; margin-top: .5rem; }
+.bar i { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+.target small { font: 400 .75rem var(--mono); color: var(--muted); }
+.note { margin-top: 2rem; font: 400 .8rem var(--mono); color: var(--muted); }
+@media (max-width: 860px) { .targets { grid-template-columns: 1fr 1fr; } }
+
+/* Governance */
+.gov { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.gov-list { display: grid; border-top: 1px solid var(--line); }
+.gov-list div { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
+.gov-list dt { font: 500 .85rem var(--mono); color: var(--ink); }
+.gov-list dd { margin: 0; color: var(--muted); font-size: .95rem; min-width: 0; }
+@media (max-width: 860px) { .gov { grid-template-columns: 1fr; } .gov-list div { grid-template-columns: 1fr; gap: .2rem; } }
+
+/* Get involved */
+.involve { background: var(--canopy-soft); }
+.ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.way { background: var(--surface); border-radius: 14px; padding: 1.6rem; display: grid; gap: .8rem; align-content: start; min-width: 0; }
+.way p { color: var(--muted); font-size: .95rem; }
+.way .btn { justify-self: start; margin-top: .4rem; }
+.way.feature { background: var(--deep); color: var(--on-dark); }
+.way.feature p { color: color-mix(in srgb, var(--on-dark) 75%, transparent); }
+.way.feature .btn-primary { background: #e0b25a; color: #1a1408; }
+@media (max-width: 860px) { .ways { grid-template-columns: 1fr; } }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 5vw, 4rem); }
+.contact address { font-style: normal; display: grid; gap: 1rem; margin-top: 1.5rem; color: var(--muted); }
+.contact address b { display: block; font: 500 var(--s-1) var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+form { display: grid; gap: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.6rem; min-width: 0; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 500; }
+input, select, textarea { font: inherit; font-weight: 400; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .8rem; width: 100%; }
+textarea { min-height: 7rem; resize: vertical; }
+.form-msg { font-size: .9rem; color: var(--canopy); }
+@media (max-width: 860px) { .contact { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .row2 { grid-template-columns: 1fr; } }
+
+/* Footer */
+footer { background: var(--deep); color: color-mix(in srgb, var(--on-dark) 70%, transparent); padding-block: 3rem 2.5rem; font-size: .9rem; }
+footer .wrap { display: grid; gap: 2rem; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2rem; }
+footer h4 { margin: 0 0 .7rem; font: 500 var(--s-1) var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-dark); }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+footer a { color: inherit; text-decoration: none; }
+footer a:hover { color: var(--on-dark); }
+.legal { border-top: 1px solid color-mix(in srgb, var(--on-dark) 15%, transparent); padding-top: 1.5rem; font: 400 .75rem/1.6 var(--mono); }
+@media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
 </head>
-<body class="home">
-  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+<body>
 
-  <header class="site-nav" id="siteNav">
-    <a class="brand" href="#top" aria-label="Royalty Nexus home">
-      <img src="assets/favicon.svg" alt="" width="34" height="34">
-      <span>Royalty <em>Nexus</em></span>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="RoyaltyNexus Foundation home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".35"/><circle cx="15" cy="16.5" r="10" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="14.5" cy="17" r="5" fill="none" stroke="#a8741a" stroke-width="1.8"/><circle cx="14.2" cy="17.2" r="1.6" fill="#a8741a"/></svg>
+      <span>RoyaltyNexus<small>Foundation</small></span>
     </a>
-    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
-    <nav class="nav-links" id="navLinks">
-      <a href="#foundation">Foundation</a>
-      <a href="#campaigns">Campaigns</a>
-      <a href="#participate">Participate</a>
-      <a href="verify.html">Verify Certificate</a>
-      <a href="#wealth" class="nav-wealth">Private Wealth</a>
-      <a href="register.html" class="btn btn-sm btn-leaf">Register</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav">
+      <a href="#mission">Mission</a>
+      <a href="#stewardship">Wealth stewardship</a>
+      <a href="#programmes">Programmes</a>
+      <a href="#governance">Governance</a>
+      <a href="register.html">Join a campaign</a>
+      <a href="verify.html">Verify certificate</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-primary" href="#involve">Give</a>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <!-- ============ HERO: layered morning landscape ============ -->
-  <section class="hero" id="top">
-    <div class="scene scene-morning" aria-hidden="true">
-      <div class="photo" data-photo="assets/photos/forest-hero.jpg" data-speed="0.35"></div>
-      <video class="bg-video" muted loop playsinline preload="none" data-video="assets/video/forest-hero" data-speed="0.35"></video>
-      <div class="sky"></div>
-      <div class="sun" data-speed="-0.35"><span></span></div>
-      <div class="rays" data-speed="-0.2"></div>
-      <div class="clouds" data-speed="0.12">
-        <svg class="cloud c1" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
-        <svg class="cloud c2" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
-        <svg class="cloud c3" viewBox="0 0 200 60"><path d="M20 50h160c12 0 18-8 16-16s-12-12-20-10c-2-12-14-20-28-16-6-12-22-16-34-8-10-8-28-4-32 10-14-4-28 4-28 16-14 0-22 8-18 16 2 5 6 8 14 8z" /></svg>
-      </div>
-      <div class="birds">
-        <svg class="bird b1" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
-        <svg class="bird b2" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
-        <svg class="bird b3" viewBox="0 0 40 14"><path d="M0 6c6-6 12-6 20 4 8-10 14-10 20-4-6-2-12 0-20 8C12 6 6 4 0 6z"/></svg>
-      </div>
+<main id="top">
 
-      <svg class="layer layer-far" data-speed="0.55" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <defs>
-          <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#9fb3c6"/><stop offset="1" stop-color="#c9d4da"/>
-          </linearGradient>
-        </defs>
-        <path fill="url(#gFar)" d="M0 600V330l90-40 80 20 90-90 80 40 80-80 80 60 80-40 80 70 100-120 100 80 80-30 80 60 100-90 80 60 90-30 80 50 70-20v370z"/>
-        <path fill="#fff" opacity=".55" d="M760 150l-34 42 20-6 14 14 14-16 24 8zM420 180l-26 32 16-4 10 10 12-12 18 4zM1120 170l-30 34 18-4 12 12 12-12 20 4z"/>
-      </svg>
-
-      <div class="mist mist-1" data-speed="0.45"></div>
-
-      <svg class="layer layer-mid" data-speed="0.4" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <defs>
-          <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#7f9c98"/><stop offset="1" stop-color="#9fb3a8"/>
-          </linearGradient>
-        </defs>
-        <path fill="url(#gMid)" d="M0 600V380q120-80 220-40t200-20q100-60 220 10t220-30q120-60 240 20t220-20q70-10 120 20v280z"/>
-      </svg>
-
-      <svg class="layer layer-hills" data-speed="0.25" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <path fill="#4f7a5a" d="M0 600V440c200-50 320 20 520-20s340-40 480 10 300-30 440 0v170z"/>
-        <g id="treesHills" fill="#3a6448"></g>
-      </svg>
-
-      <div class="mist mist-2" data-speed="0.18"></div>
-
-      <svg class="layer layer-front" data-speed="0.06" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <g id="treesFront" fill="#12261b"></g>
-        <path fill="#12261b" d="M0 600v-70q360-50 720-10t720-30v110z"/>
-      </svg>
-    </div>
-
-    <div class="hero-content" data-hero-fade>
-      <p class="eyebrow">Royalty Nexus Foundation Trust</p>
-      <h1>Rooted in nature.<br><span>Growing with purpose.</span></h1>
-      <p class="lead">Public environmental campaigns — in the field and online — that restore forests, rivers and coastlines, powered by a community of volunteers and the stewardship of Royalty Nexus.</p>
-      <div class="hero-cta">
-        <a href="#campaigns" class="btn btn-leaf">Join a campaign</a>
-        <a href="#wealth" class="btn btn-ghost">Private wealth management</a>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">Non-profit foundation · Est. for the long term</span>
+      <h1>Private wealth, held in trust for a <em>living planet</em>.</h1>
+      <p class="lede">RoyaltyNexus Foundation helps families and individuals turn their wealth into permanent public good. We steward endowed capital responsibly and use every rupee and dollar of its returns to restore forests, rivers and coasts, and to help communities grow without costing the Earth.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#involve">Support our work</a>
+        <a class="btn btn-ghost" href="#stewardship">Steward your wealth with us</a>
       </div>
     </div>
-    <a class="scroll-cue" href="#foundation" aria-label="Scroll to explore"><span></span></a>
-  </section>
+    <figure class="rings" aria-label="Growth rings illustration">
+      <canvas id="rings"></canvas>
+      <figcaption>Each ring is a year. Endowments, like trees, are measured in decades.</figcaption>
+    </figure>
+  </div>
+</section>
 
-  <!-- ============ FOUNDATION ============ -->
-  <section class="section forest-floor" id="foundation">
-    <div class="fireflies" aria-hidden="true"></div>
-    <div class="container narrow reveal">
-      <p class="eyebrow light">Our foundation</p>
-      <h2 class="display">A public trust for the living world.</h2>
-      <p class="lead light">The Royalty Nexus Foundation Trust is a public charitable trust. Every campaign is open to all — students, families, professionals and companies — and free to join. We work on the ground in forests, rivers and coasts, and online through live classes and citizen-science programmes that anyone can join from home.</p>
+<section id="mission">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What we do</span>
+      <h2>Three commitments, one purpose</h2>
+      <p class="lede">We exist to keep the Earth habitable and prosperous for the generations after ours. Our work rests on three connected pillars.</p>
     </div>
-    <div class="container stats">
-      <div class="stat reveal"><strong data-count="1240000">0</strong><span>native trees planted</span></div>
-      <div class="stat reveal"><strong data-count="38500">0</strong><span>volunteers mobilised</span></div>
-      <div class="stat reveal"><strong data-count="212">0</strong><span>kilometres of river restored</span></div>
-      <div class="stat reveal"><strong data-count="0" data-live="certificates">0</strong><span>certificates issued this season</span></div>
+    <div class="pillars">
+      <article class="pillar">
+        <span class="tag">Pillar I</span>
+        <h3>Protect and restore the Earth</h3>
+        <p>We fund science-led restoration of the ecosystems that hold our climate steady and our water clean.</p>
+        <ul><li>Native forest and mangrove restoration</li><li>Watershed and wetland revival</li><li>Biodiversity corridors and seed banks</li></ul>
+      </article>
+      <article class="pillar">
+        <span class="tag">Pillar II</span>
+        <h3>Steward private wealth for public good</h3>
+        <p>Donors place capital in permanent or time-bound endowment funds that we invest under a strict responsible-investment policy.</p>
+        <ul><li>Endowment and donor-advised funds</li><li>Legacy and family philanthropy planning</li><li>Fossil-free, impact-screened portfolios</li></ul>
+      </article>
+      <article class="pillar">
+        <span class="tag">Pillar III</span>
+        <h3>Help the world grow, sustainably</h3>
+        <p>We back people and enterprises that create livelihoods while lowering pressure on land, water and air.</p>
+        <ul><li>Clean energy for rural homes and schools</li><li>Green livelihoods and women-led enterprise</li><li>Climate education for young people</li></ul>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ============ PILLARS ============ -->
-  <section class="section paper" id="pillars">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">What we restore</p>
-        <h2 class="display">Four pillars of environmental action</h2>
-      </div>
-      <div class="pillars">
-        <article class="pillar reveal">
-          <div class="pillar-icon forest"><svg viewBox="0 0 48 48"><path d="M24 4l10 14h-6l9 12h-7l8 10H10l8-10h-7l9-12h-6z"/><rect x="22" y="40" width="4" height="6"/></svg></div>
-          <h3>Reforestation</h3>
-          <p>Native-species planting, seed banks and multi-year survival monitoring of every sapling.</p>
-        </article>
-        <article class="pillar reveal">
-          <div class="pillar-icon water"><svg viewBox="0 0 48 48"><path d="M24 4C16 16 10 23 10 30a14 14 0 0028 0c0-7-6-14-14-26z"/></svg></div>
-          <h3>Clean Water</h3>
-          <p>River clean-ups, wetland revival and citizen water-quality testing along urban rivers.</p>
-        </article>
-        <article class="pillar reveal">
-          <div class="pillar-icon wildlife"><svg viewBox="0 0 48 48"><path d="M8 30c4-12 14-18 26-16 4 1 7 4 8 8-5-2-9-1-12 2 5 1 8 4 9 8-6-3-12-3-18 0-4 2-9 1-13-2z"/><circle cx="36" cy="18" r="1.8" fill="#fff"/></svg></div>
-          <h3>Wildlife & Coasts</h3>
-          <p>Mangrove belts, habitat corridors and nesting-site protection with local communities.</p>
-        </article>
-        <article class="pillar reveal">
-          <div class="pillar-icon education"><svg viewBox="0 0 48 48"><path d="M24 8L2 18l22 10 18-8v12h4V18z"/><path d="M12 25v9c0 3 6 6 12 6s12-3 12-6v-9l-12 5z"/></svg></div>
-          <h3>Climate Education</h3>
-          <p>Free online masterclasses, school programmes and practical toolkits for climate action.</p>
-        </article>
-      </div>
+<section id="stewardship" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How wealth stewardship works</span>
+      <h2>From a gift today to grants for generations</h2>
+      <p class="lede">We are a non-profit. We do not earn fees from donors' wealth. Every return the endowment earns, after audited operating costs, goes to our charitable mission.</p>
     </div>
-  </section>
-
-  <!-- ============ CAMPAIGNS (dynamic) ============ -->
-  <section class="section meadow" id="campaigns">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Open for registration</p>
-        <h2 class="display">Upcoming campaigns</h2>
-        <p class="muted">Every campaign is public and free. Join in person, online, or both.</p>
-      </div>
-      <div class="filter-chips reveal" role="tablist" aria-label="Filter campaigns">
-        <button class="chip is-active" data-filter="all" role="tab" aria-selected="true">All</button>
-        <button class="chip" data-filter="offline" role="tab" aria-selected="false">In the field</button>
-        <button class="chip" data-filter="online" role="tab" aria-selected="false">Online</button>
-        <button class="chip" data-filter="hybrid" role="tab" aria-selected="false">Hybrid</button>
-      </div>
-      <div class="campaign-grid" id="campaignGrid">
-        <p class="muted">Loading campaigns…</p>
-      </div>
+    <ol class="flow">
+      <li><h3>You commit capital</h3><p>Give outright, set up a named fund for your family, or leave a legacy gift in your will. We agree the fund's purpose with you in writing.</p></li>
+      <li><h3>We invest it responsibly</h3><p>The fund joins our endowment pool, invested for long-term growth with no fossil-fuel, tobacco or weapons exposure, overseen by an independent investment committee.</p></li>
+      <li><h3>Returns fund the mission</h3><p>Each year a prudent share of the fund's value, around 4–5%, is paid out as grants, so the principal keeps its real value over time.</p></li>
+      <li><h3>Impact is measured and reported</h3><p>Every grant has field targets in hectares restored, litres recharged, homes powered and tonnes of CO₂e avoided. You receive an annual report for your fund.</p></li>
+    </ol>
+    <div class="policy" aria-label="Investment policy highlights">
+      <span>Annual payout · 4–5% of 3-year average value</span>
+      <span>Fossil-free mandate</span>
+      <span>Independent investment committee</span>
+      <span>Externally audited accounts</span>
+      <span>Donor-named funds from a set minimum</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ============ PARTICIPATE ============ -->
-  <section class="section paper" id="participate">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">How to take part</p>
-        <h2 class="display">Online or in the field — every hour counts</h2>
-      </div>
-      <div class="modes">
-        <div class="mode-card reveal">
-          <span class="tag tag-offline">Offline</span>
-          <h3>In the field</h3>
-          <p>Plant, clean and restore alongside our field teams. Tools, safety briefing, refreshments and transport from city pickup points are provided. Walk-in registrations are welcome at the base camp desk.</p>
-        </div>
-        <div class="mode-card reveal">
-          <span class="tag tag-online">Online</span>
-          <h3>From anywhere</h3>
-          <p>Join live masterclasses, citizen-science labs and mapping sprints. Your joining link is shared after registration and attendance is recorded automatically.</p>
-        </div>
-      </div>
-      <ol class="steps">
-        <li class="reveal"><span>1</span><h4>Register</h4><p>Pick a campaign and register in under a minute. You get a registration ID instantly.</p></li>
-        <li class="reveal"><span>2</span><h4>Participate</h4><p>Show your registration ID at the field desk, or join through your online link.</p></li>
-        <li class="reveal"><span>3</span><h4>Get certified</h4><p>Receive a verifiable Certificate of Participation from the Foundation Trust.</p></li>
-      </ol>
+<section id="programmes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Programmes</span>
+      <h2>Where the money goes to work</h2>
+      <p class="lede">We fund local partners who know their land best, and we stay for the years it takes a forest or a river to recover.</p>
     </div>
-  </section>
+    <div class="programs">
+      <article class="program"><span class="where">Coasts · Mangroves</span><h3>Blue Carbon Coasts</h3><p>Replanting mangroves and seagrass that shelter fishing villages from storms and lock away carbon several times faster than land forests.</p><div class="metric">Measured in hectares replanted and seedling survival rate</div></article>
+      <article class="program"><span class="where">Rivers · Watersheds</span><h3>Living Rivers</h3><p>Reviving tanks, check dams and wetlands with farming communities so rain stays in the ground and wells refill.</p><div class="metric">Measured in million litres of groundwater recharged</div></article>
+      <article class="program"><span class="where">Land · Native forests</span><h3>Native Forest Corridors</h3><p>Growing native species, never monoculture plantations, to reconnect fragmented habitats for wildlife and pollinators.</p><div class="metric">Measured in native trees surviving after three years</div></article>
+      <article class="program"><span class="where">Energy · Rural access</span><h3>Bright Villages</h3><p>Solar power for homes, schools and clinics, with local technicians trained and paid to maintain the systems.</p><div class="metric">Measured in households and schools powered</div></article>
+      <article class="program"><span class="where">People · Livelihoods</span><h3>Green Livelihoods</h3><p>Seed grants and mentoring for women-led and youth-led enterprises in regenerative farming, recycling and eco-tourism.</p><div class="metric">Measured in jobs created and income earned</div></article>
+      <article class="program"><span class="where">Youth · Education</span><h3>Earth Classrooms</h3><p>Hands-on climate and nature education, school nurseries and field projects that turn students into local stewards.</p><div class="metric">Measured in students and schools reached</div></article>
+    </div>
+  </div>
+</section>
 
-  <!-- ============ VERIFY BAND ============ -->
-  <section class="verify-band">
-    <div class="container verify-inner reveal">
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Our 2030 commitments</span>
+      <h2>Targets we hold ourselves to</h2>
+    </div>
+    <div class="targets">
+      <div class="target"><b>10,000</b><span>hectares of forest, mangrove and wetland under restoration</span><small>Progress reported annually</small></div>
+      <div class="target"><b>5 M</b><span>native trees planted and cared for until established</span><small>Progress reported annually</small></div>
+      <div class="target"><b>50,000</b><span>households with clean, reliable energy</span><small>Progress reported annually</small></div>
+      <div class="target"><b>100%</b><span>of endowment assets fossil-free and impact-screened</span><small>Progress reported annually</small></div>
+    </div>
+    <p class="note">These are targets, not results. Verified progress is published in our annual impact report.</p>
+  </div>
+</section>
+
+<section id="governance" style="border-top:1px solid var(--line)">
+  <div class="wrap gov">
+    <div class="sec-head" style="margin:0">
+      <span class="eyebrow">Governance &amp; transparency</span>
+      <h2>Trust is the asset we protect most</h2>
+      <p class="lede">A foundation that manages other people's wealth must be easy to check. These are our standing rules.</p>
+    </div>
+    <dl class="gov-list">
+      <div><dt>Board of trustees</dt><dd>A majority of independent trustees. No trustee may receive grants or contracts from the foundation.</dd></div>
+      <div><dt>Investment committee</dt><dd>Independent finance professionals set and review the investment policy every year.</dd></div>
+      <div><dt>Audit</dt><dd>Annual statutory audit by an external firm, published in full on this site.</dd></div>
+      <div><dt>Cost discipline</dt><dd>Administrative costs are capped and reported as a share of annual spending.</dd></div>
+      <div><dt>Donor privacy</dt><dd>Donor details are never sold or shared. Gifts can be anonymous on request.</dd></div>
+      <div><dt>Conflict of interest</dt><dd>Every trustee and staff member declares interests annually and steps aside where one exists.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="involve" class="involve">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Get involved</span>
+      <h2>Every gift grows</h2>
+      <p class="lede">Choose the way of giving that fits you. Our team will guide you through each step.</p>
+    </div>
+    <div class="ways">
+      <article class="way"><h3>Donate</h3><p>A one-time or monthly gift goes straight to field programmes. You can choose a programme or let us direct it where the need is greatest.</p><a class="btn btn-primary" href="#contact" data-topic="Donation">Make a donation</a></article>
+      <article class="way feature"><h3>Create a named fund</h3><p>Set up an endowment or donor-advised fund in your family's name. We invest it responsibly and grant its returns to causes you care about, for as long as you choose.</p><a class="btn btn-primary" href="#contact" data-topic="Wealth stewardship">Talk to our stewardship team</a></article>
+      <article class="way"><h3>Volunteer or partner</h3><p>Join a tree-planting drive, clean-up or online campaign and earn a verifiable certificate for your service hours. Companies and NGOs can co-fund a programme.</p><a class="btn btn-ghost" href="register.html">Register for a campaign</a></article>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact">
+    <div>
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Contact</span>
+        <h2>Start a conversation</h2>
+        <p class="lede">Tell us a little about what you would like to do. A member of our team will reply within two working days.</p>
+      </div>
+      <address>
+        <div><b>Email</b>hello@royaltynexus.org</div>
+        <div><b>Stewardship enquiries</b>stewardship@royaltynexus.org</div>
+        <div><b>Office</b>RoyaltyNexus Foundation<br>Registered office address</div>
+      </address>
+    </div>
+    <form id="contactForm" novalidate>
+      <div class="row2">
+        <label for="f-name">Full name<input id="f-name" name="name" autocomplete="name" required></label>
+        <label for="f-email">Email<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      </div>
+      <label for="f-phone">Phone<input id="f-phone" name="phone" type="tel" autocomplete="tel"></label>
+      <label for="f-topic">I am interested in
+        <select id="f-topic" name="interest">
+          <option>Donation</option>
+          <option>Wealth stewardship</option>
+          <option>Legacy gift</option>
+          <option>Partnership</option>
+          <option>Volunteering</option>
+          <option>Something else</option>
+        </select>
+      </label>
+      <label for="f-msg">Message<textarea id="f-msg" name="message" placeholder="How would you like to help?"></textarea></label>
+      <button class="btn btn-primary" type="submit" style="justify-self:start">Send message</button>
+      <p class="form-msg" id="formMsg" role="status" hidden></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
       <div>
-        <h3>Verify a certificate</h3>
-        <p>Employers and schools can confirm any Royalty Nexus certificate instantly.</p>
+        <h4>RoyaltyNexus Foundation</h4>
+        <p>A non-profit foundation stewarding private wealth to restore the Earth's environment and help communities grow.</p>
       </div>
-      <form class="verify-form" action="verify.html" method="get">
-        <label class="sr-only" for="certIdHome">Certificate ID</label>
-        <input id="certIdHome" name="id" placeholder="e.g. RN-2026-7K3PQA" required>
-        <button class="btn btn-leaf" type="submit">Verify</button>
-      </form>
+      <div><h4>Work</h4><ul><li><a href="#mission">Mission</a></li><li><a href="#programmes">Programmes</a></li><li><a href="#stewardship">Wealth stewardship</a></li></ul></div>
+      <div><h4>Trust</h4><ul><li><a href="#governance">Governance</a></li><li><a href="#governance">Annual reports</a></li><li><a href="#governance">Audited accounts</a></li></ul></div>
+      <div><h4>Take part</h4><ul><li><a href="#involve">Donate</a></li><li><a href="register.html">Join a campaign</a></li><li><a href="verify.html">Verify a certificate</a></li><li><a href="admin/login.html">Admin login</a></li></ul></div>
     </div>
-  </section>
+    <p class="legal">© <span id="yr">2026</span> RoyaltyNexus Foundation. Registered non-profit. Registration and tax-exemption numbers to be added. RoyaltyNexus Foundation does not provide investment advice for personal gain; all funds are held and invested for charitable purposes.</p>
+  </div>
+</footer>
 
-  <!-- ============ SUNSET LAKE SCENE ============ -->
-  <section class="scene-band" aria-label="Sunset over the lake">
-    <div class="scene scene-sunset" aria-hidden="true">
-      <div class="photo" data-photo="assets/photos/forest-lake.jpg" data-speed="0.3"></div>
-      <video class="bg-video" muted loop playsinline preload="none" data-video="assets/video/forest-lake" data-speed="0.3"></video>
-      <div class="sky"></div>
-      <div class="sun" data-speed="0.25"><span></span></div>
-      <svg class="layer" data-speed="0.3" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <path fill="#6b4a63" d="M0 600V360l120-50 110 30 140-110 120 70 110-40 150 90 140-120 120 70 130-30 130 60 100-20 100 30v220z"/>
-      </svg>
-      <svg class="layer" data-speed="0.18" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <path fill="#3e2f47" d="M0 600V420q160-60 300-20t260-30q140-30 280 30t300-10q180-50 300 10v200z"/>
-        <g id="treesSunset" fill="#2a2135"></g>
-      </svg>
-      <div class="lake" data-speed="0.05"><span class="shimmer"></span></div>
-      <svg class="layer layer-reeds" data-speed="-0.04" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
-        <g id="reeds" stroke="#140f1c" stroke-width="3" fill="none" stroke-linecap="round"></g>
-      </svg>
-    </div>
-    <blockquote class="scene-quote reveal">
-      <p>“We do not inherit the earth from our ancestors; we borrow it from our children.”</p>
-      <cite>— The principle behind every trust we build</cite>
-    </blockquote>
-  </section>
+<script src="js/store.js"></script>
+<script>
+(function () {
+  // Mobile menu
+  var btn = document.getElementById('menuBtn'), nav = document.getElementById('nav');
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+  nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); } });
 
-  <!-- ============ PRIVATE WEALTH ============ -->
-  <section class="section wealth" id="wealth">
-    <div class="stars" aria-hidden="true"></div>
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow gold">Royalty Nexus Private Wealth</p>
-        <h2 class="display">Stewardship for generations.</h2>
-        <p class="lead light">Royalty Nexus is a private wealth management company serving families, founders and institutions. We protect and grow capital with the same long horizon we bring to our forests — and a share of our advisory fees endows the Foundation Trust.</p>
-      </div>
-      <div class="services">
-        <article class="service reveal"><span class="service-no">01</span><h3>Wealth Planning</h3><p>Goal-based financial planning, liquidity strategy and cash-flow structuring for complex balance sheets.</p></article>
-        <article class="service reveal"><span class="service-no">02</span><h3>Investment Management</h3><p>Discretionary and advisory portfolios across public markets, fixed income and alternatives.</p></article>
-        <article class="service reveal"><span class="service-no">03</span><h3>Family Office</h3><p>Consolidated reporting, governance, next-generation education and concierge administration.</p></article>
-        <article class="service reveal"><span class="service-no">04</span><h3>Estate & Trust Structuring</h3><p>Succession planning and trust administration with your legal and tax advisers.</p></article>
-        <article class="service reveal"><span class="service-no">05</span><h3>Impact & ESG Investing</h3><p>Portfolios aligned with climate and sustainability goals, with transparent impact reporting.</p></article>
-        <article class="service reveal"><span class="service-no">06</span><h3>Philanthropy Advisory</h3><p>Design your own giving vehicle or partner directly with the Foundation Trust’s campaigns.</p></article>
-      </div>
+  // "Get involved" buttons preselect the enquiry topic
+  document.querySelectorAll('[data-topic]').forEach(function (a) {
+    a.addEventListener('click', function () { document.getElementById('f-topic').value = a.dataset.topic; });
+  });
 
-      <div class="wealth-split">
-        <div class="principles reveal">
-          <h3>Our principles</h3>
-          <ul>
-            <li><strong>Discretion.</strong> Client affairs are handled by a dedicated relationship team under strict confidentiality.</li>
-            <li><strong>Alignment.</strong> Transparent fees and no hidden product commissions.</li>
-            <li><strong>Patience.</strong> Decisions measured in decades, not quarters.</li>
-            <li><strong>Purpose.</strong> Every mandate contributes to environmental restoration.</li>
-          </ul>
-          <p class="fine">Investments carry risk, including loss of capital. Past performance is not a reliable indicator of future results. Services are subject to eligibility and applicable regulation.</p>
-        </div>
-        <form class="enquiry-form reveal" id="enquiryForm" novalidate>
-          <h3>Request a private consultation</h3>
-          <p class="muted light">A relationship director will contact you within two business days.</p>
-          <div class="field-row">
-            <label>Full name<input name="name" required autocomplete="name"></label>
-            <label>Email<input name="email" type="email" required autocomplete="email"></label>
-          </div>
-          <div class="field-row">
-            <label>Phone<input name="phone" type="tel" autocomplete="tel"></label>
-            <label>Investable assets
-              <select name="assets" required>
-                <option value="">Select a range</option>
-                <option>Up to 1 Cr / $120k</option>
-                <option>1–10 Cr / $120k–1.2M</option>
-                <option>10–50 Cr / $1.2M–6M</option>
-                <option>50 Cr+ / $6M+</option>
-                <option>Institution / Endowment</option>
-              </select>
-            </label>
-          </div>
-          <label>Area of interest
-            <select name="interest">
-              <option>Wealth Planning</option>
-              <option>Investment Management</option>
-              <option>Family Office</option>
-              <option>Estate & Trust Structuring</option>
-              <option>Impact & ESG Investing</option>
-              <option>Philanthropy Advisory</option>
-            </select>
-          </label>
-          <label>Message (optional)<textarea name="message" rows="3"></textarea></label>
-          <label class="check"><input type="checkbox" name="consent" required> I agree to be contacted by Royalty Nexus about my enquiry.</label>
-          <button class="btn btn-gold" type="submit">Send enquiry</button>
-          <p class="form-msg" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </div>
-  </section>
+  // Contact form: validated in the page; connect to a form service when hosting
+  var form = document.getElementById('contactForm'), msg = document.getElementById('formMsg');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.name.value.trim(), email = form.email.value.trim();
+    msg.hidden = false;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = 'Please enter your name and a valid email address.';
+      return;
+    }
+    // Saved to the same store the admin console reads under "Wealth enquiries"
+    var data = { name: name, email: email, phone: form.phone.value.trim(), interest: form.interest.value, message: form.message.value.trim() };
+    try { window.RN && RN.addEnquiry(data); } catch (err) {}
+    msg.textContent = 'Thank you, ' + name.split(' ')[0] + '. Your message has been received. Our team will reply to ' + email + ' within two working days.';
+    form.reset();
+  });
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <a class="brand" href="#top"><img src="assets/favicon.svg" alt="" width="30" height="30"><span>Royalty <em>Nexus</em></span></a>
-        <p class="muted light">Royalty Nexus Foundation Trust — a public charitable trust for environmental restoration.<br>Royalty Nexus Private Wealth — private wealth management.</p>
-      </div>
-      <div>
-        <h4>Foundation</h4>
-        <a href="#campaigns">Campaigns</a>
-        <a href="register.html">Register</a>
-        <a href="verify.html">Verify certificate</a>
-      </div>
-      <div>
-        <h4>Private Wealth</h4>
-        <a href="#wealth">Services</a>
-        <a href="#enquiryForm">Private consultation</a>
-      </div>
-      <div>
-        <h4>Staff</h4>
-        <a href="admin/login.html">Admin login</a>
-      </div>
-    </div>
-    <p class="container copyright">© <span id="year"></span> Royalty Nexus. All rights reserved.</p>
-  </footer>
+  document.getElementById('yr').textContent = new Date().getFullYear();
 
-  <script src="js/store.js"></script>
-  <script src="js/scene.js"></script>
-  <script src="js/main.js"></script>
+  // Growth rings: each ring is one year, slightly irregular like real wood
+  var cv = document.getElementById('rings'), ctx = cv.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var RINGS = 34, seeds = [];
+  for (var i = 0; i < RINGS; i++) seeds.push([Math.random() * 6.28, Math.random() * 6.28, .6 + Math.random() * .8]);
+
+  function color(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  function draw(progress) {
+    var r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    if (!r.width) return;
+    cv.width = r.width * dpr; cv.height = r.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var w = r.width, cx = w * .47, cy = w * .5, maxR = w * .46;
+    var canopy = color('--canopy'), gold = color('--gold');
+    var shown = Math.max(1, Math.round(RINGS * progress));
+    for (var k = shown - 1; k >= 0; k--) {
+      var t = (k + 1) / RINGS, base = maxR * Math.pow(t, .85), s = seeds[k];
+      ctx.beginPath();
+      for (var a = 0; a <= 6.30; a += .05) {
+        var wob = 1 + .025 * Math.sin(a * 3 + s[0]) * s[2] + .018 * Math.sin(a * 5 + s[1]);
+        var x = cx + Math.cos(a) * base * wob, y = cy + Math.sin(a) * base * wob;
+        a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      var golden = (k % 5 === 4);
+      ctx.strokeStyle = golden ? gold : canopy;
+      ctx.globalAlpha = golden ? .9 : .25 + .45 * (1 - t);
+      ctx.lineWidth = golden ? 1.6 : (k % 2 ? .7 : 1.1);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = gold;
+    ctx.beginPath(); ctx.arc(cx, cy, 3.2, 0, 6.29); ctx.fill();
+  }
+
+  var start = null;
+  function tick(ts) {
+    if (!start) start = ts;
+    var p = Math.min(1, (ts - start) / 1800);
+    draw(.35 + .65 * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  if (reduce) draw(1); else { draw(.35); requestAnimationFrame(tick); }
+  window.addEventListener('resize', function () { draw(1); });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { draw(1); });
+})();
+</script>
 </body>
 </html>
