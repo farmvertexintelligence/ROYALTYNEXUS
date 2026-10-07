@@ -502,18 +502,29 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--l
 .scene.has-photo .photo { opacity: 1; animation: kenburns 40s ease-in-out infinite alternate; }
 @keyframes kenburns { from { scale: 1.02; } to { scale: 1.12; } }
 .scene.has-photo > .sky, .scene.has-photo > .sun, .scene.has-photo > .clouds,
-.scene.has-photo > .layer, .scene.has-photo > .lake { display: none; }
+.scene.has-photo > .layer, .scene.has-photo > .lake,
+.scene.has-video > .sky, .scene.has-video > .sun, .scene.has-video > .clouds,
+.scene.has-video > .layer, .scene.has-video > .lake { display: none; }
 /* Keep the atmosphere on top of the photo */
-.scene.has-photo .mist-1 { opacity: .55; }
-.scene.has-photo .mist-2 { opacity: .7; }
-.scene.has-photo .rays { left: 70%; top: 10%; opacity: .6; mix-blend-mode: screen; }
-.scene.has-photo .bird { fill: #1a2620; }
-.scene-morning.has-photo::after {
+.scene.has-photo .mist-1, .scene.has-video .mist-1 { opacity: .55; }
+.scene.has-photo .mist-2, .scene.has-video .mist-2 { opacity: .7; }
+.scene.has-photo .rays, .scene.has-video .rays { left: 70%; top: 10%; opacity: .6; mix-blend-mode: screen; }
+.scene.has-photo .bird, .scene.has-video .bird { fill: #1a2620; }
+.scene-morning.has-photo::after, .scene-morning.has-video::after {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(10, 24, 16, .35) 0%, rgba(10, 24, 16, .05) 35%, rgba(18, 38, 27, .2) 70%, var(--forest-800) 100%);
 }
-.scene-sunset.has-photo::after {
+.scene-sunset.has-photo::after, .scene-sunset.has-video::after {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(20, 18, 32, .55) 0%, rgba(20, 18, 32, .15) 40%, rgba(20, 18, 32, .35) 75%, #141220 100%);
 }
 .page-banner .scene-morning.has-photo::after { background: linear-gradient(180deg, rgba(10, 24, 16, .55), rgba(10, 24, 16, .35)); }
+
+/* Real video (assets/video/*) — sits above the photo, below mist and text */
+.scene .bg-video {
+  position: absolute; left: 0; top: -12%; width: 100%; height: 124%;
+  object-fit: cover; opacity: 0; transition: opacity 1.6s ease;
+  will-change: transform; pointer-events: none;
+}
+.scene.has-video .bg-video { opacity: 1; }
+.scene.has-video .photo { animation: none; }

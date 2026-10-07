@@ -114,6 +114,37 @@
     img.src = ph.dataset.photo;
   });
 
+  // ---- Real video ----
+  // <video data-video="path/name"> tries name.webm then name.mp4. When a clip
+  // can play, the scene switches to it; otherwise the photo or drawing stays.
+  // Skipped for reduced-motion and data-saver visitors; paused off-screen.
+  const conn = navigator.connection || {};
+  const allowVideo = !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !conn.saveData;
+  const videoObserver = 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => entries.forEach(e => {
+        const v = e.target;
+        if (!v.closest('.scene').classList.contains('has-video')) return;
+        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+      }), { threshold: 0.05 })
+    : null;
+  document.querySelectorAll('.scene video[data-video]').forEach(v => {
+    if (!allowVideo) return;
+    const base = v.dataset.video;
+    [['webm', 'video/webm'], ['mp4', 'video/mp4']].forEach(([ext, type]) => {
+      const s = document.createElement('source');
+      s.src = base + '.' + ext;
+      s.type = type;
+      v.appendChild(s);
+    });
+    v.addEventListener('canplay', () => {
+      v.closest('.scene').classList.add('has-video');
+      v.play().catch(() => {});
+    }, { once: true });
+    v.preload = 'auto';
+    v.load();
+    if (videoObserver) videoObserver.observe(v);
+  });
+
   // ---- Scroll effects ----
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const layers = Array.from(document.querySelectorAll('[data-speed]')).map(el => ({
