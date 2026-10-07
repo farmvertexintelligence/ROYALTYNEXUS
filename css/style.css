@@ -528,3 +528,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--l
 }
 .scene.has-video .bg-video { opacity: 1; }
 .scene.has-video .photo { animation: none; }
+/* The rendered clips carry their own sun, rays, clouds and birds */
+.scene.has-video .rays, .scene.has-video .birds { display: none; }
+.scene.has-video .mist-1, .scene.has-video .mist-2 { opacity: .3; }

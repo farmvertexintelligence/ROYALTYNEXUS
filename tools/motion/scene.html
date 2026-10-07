@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap">
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+/*
+ * Deterministic motion-graphic renderer. window.render(t) draws the frame at
+ * time t (seconds). Every motion is periodic in LOOP seconds (or crosses the
+ * frame fully off-screen), so frame LOOP equals frame 0 and the video loops
+ * without a seam.
+ *   ?mode=morning | sunset | promo   &w=1280&h=720
+ */
+const P = new URLSearchParams(location.search);
+const W = +P.get('w') || 1280, H = +P.get('h') || 720;
+const MODE = P.get('mode') || 'morning';
+const LOOP = 20;
+const TAU = Math.PI * 2;
+const s = H / 720; // scale unit
+
+const canvas = document.getElementById('c');
+canvas.width = W; canvas.height = H;
+const ctx = canvas.getContext('2d');
+
+function rng(seed) { return () => (seed = (seed * 16807) % 2147483647, (seed - 1) / 2147483646); }
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const ease = x => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+
+// Ridge line: sum of sines with fixed random phases
+function ridge(seed, base, amp, harmonics) {
+  const r = rng(seed);
+  const hs = harmonics.map(f => ({ f, p: r() * TAU, a: (0.5 + r()) / f }));
+  const norm = hs.reduce((m, h) => m + h.a, 0);
+  return x => base + amp * hs.reduce((m, h) => m + h.a * Math.sin(h.f * TAU * x / W + h.p), 0) / norm;
+}
+function ridgePath(fn, pad) {
+  const p = new Path2D();
+  p.moveTo(-pad, H + 10);
+  for (let x = -pad; x <= W + pad; x += 6 * s) p.lineTo(x, fn(x));
+  p.lineTo(W + pad, H + 10);
+  p.closePath();
+  return p;
+}
+// Pine silhouette with base at (0,0), pointing up
+function pine(h, w, p) {
+  p = p || new Path2D();
+  const tiers = 6, body = h * 0.88, pts = [];
+  for (let i = 1; i <= tiers; i++) {
+    const y = -h + body * (i / tiers), half = (w / 2) * (0.3 + 0.7 * (i / tiers));
+    pts.push([half, y]);
+    if (i < tiers) pts.push([half * 0.36, y - body * 0.03]);
+  }
+  const tr = w * 0.06;
+  p.moveTo(0, -h);
+  pts.forEach(q => p.lineTo(q[0], q[1]));
+  p.lineTo(tr, -h + body); p.lineTo(tr, 0); p.lineTo(-tr, 0); p.lineTo(-tr, -h + body);
+  pts.slice().reverse().forEach(q => p.lineTo(-q[0], q[1]));
+  p.closePath();
+  return p;
+}
+function forestPath(seed, n, xr, hr, baseFn, jitter) {
+  const r = rng(seed), p = new Path2D(), m = new DOMMatrix();
+  for (let i = 0; i < n; i++) {
+    const x = xr[0] + r() * (xr[1] - xr[0]);
+    const h = hr[0] + r() * (hr[1] - hr[0]);
+    const base = baseFn(x) + r() * jitter;
+    const one = pine(h, h * (0.3 + r() * 0.14));
+    p.addPath(one, m.translate(x, base));
+  }
+  return p;
+}
+function softBlob(c, x, y, rx, ry, color, alpha) {
+  c.save();
+  c.translate(x, y); c.scale(rx, ry);
+  const g = c.createRadialGradient(0, 0, 0, 0, 0, 1);
+  g.addColorStop(0, `rgba(${color},${alpha})`);
+  g.addColorStop(1, `rgba(${color},0)`);
+  c.fillStyle = g;
+  c.beginPath(); c.arc(0, 0, 1, 0, TAU); c.fill();
+  c.restore();
+}
+function drawBird(c, x, y, size, flap, color) {
+  const wy = Math.sin(flap) * size * 0.55;
+  c.save(); c.translate(x, y);
+  c.fillStyle = color;
+  c.beginPath();
+  c.moveTo(-size, -wy);
+  c.quadraticCurveTo(-size * 0.45, -wy * 0.2 - size * 0.12, 0, size * 0.12);
+  c.quadraticCurveTo(size * 0.45, -wy * 0.2 - size * 0.12, size, -wy);
+  c.quadraticCurveTo(size * 0.45, -wy * 0.1 + size * 0.05, 0, size * 0.28);
+  c.quadraticCurveTo(-size * 0.45, -wy * 0.1 + size * 0.05, -size, -wy);
+  c.fill(); c.restore();
+}
+function birds(c, t, seed, yBase, color, count, dir) {
+  const r = rng(seed);
+  for (let i = 0; i < count; i++) {
+    const off = r() * 0.12, dy = (r() - 0.5) * 0.06 * H, size = (9 + r() * 6) * s;
+    const u = ((t / LOOP) + off) % 1;
+    const x = dir > 0 ? -0.15 * W + u * 1.3 * W : 1.15 * W - u * 1.3 * W;
+    const y = yBase + dy + Math.sin(TAU * (t / LOOP) * 2 + i) * 8 * s - u * 0.06 * H;
+    drawBird(c, x, y, size, TAU * (t / LOOP) * 44 + i * 1.7, color);
+  }
+}
+function vignette(c, strength) {
+  const g = c.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 1.05);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(1, `rgba(0,0,0,${strength})`);
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+}
+
+/* ================= MORNING FOREST ================= */
+const M = (() => {
+  const farFn = ridge(3, 0.50 * H, 0.10 * H, [1, 2, 3, 5, 8]);
+  const midFn = ridge(5, 0.60 * H, 0.06 * H, [1, 2, 4, 6]);
+  const hillFn = ridge(7, 0.69 * H, 0.035 * H, [1, 2, 3]);
+  const nearFn = ridge(9, 0.84 * H, 0.025 * H, [1, 3]);
+  const pad = 80 * s;
+  const far = ridgePath(farFn, pad), mid = ridgePath(midFn, pad), hill = ridgePath(hillFn, pad), near = ridgePath(nearFn, pad);
+  const treesA = forestPath(11, 220, [-pad, W + pad], [0.025 * H, 0.06 * H], x => midFn(x) + 0.03 * H, 0.06 * H);
+  const treesB = forestPath(13, 150, [-pad, W + pad], [0.05 * H, 0.11 * H], x => hillFn(x) + 0.02 * H, 0.08 * H);
+  const treesC = forestPath(17, 70, [-pad, W + pad], [0.09 * H, 0.2 * H], x => nearFn(x) + 0.01 * H, 0.05 * H);
+  // Foreground framing trees, drawn one by one so each can bend in the wind
+  const r = rng(19), framing = [];
+  for (let i = 0; i < 9; i++) framing.push({ x: -0.06 * W + r() * 0.2 * W, h: (0.55 + r() * 0.5) * H, w: 0, ph: r() * TAU });
+  for (let i = 0; i < 9; i++) framing.push({ x: 0.86 * W + r() * 0.22 * W, h: (0.55 + r() * 0.5) * H, w: 0, ph: r() * TAU });
+  framing.forEach(f => { f.w = f.h * (0.3 + r() * 0.1); f.path = pine(f.h, f.w); });
+  framing.sort((a, b) => a.h - b.h);
+  const blades = [];
+  for (let i = 0; i < 260; i++) blades.push({ x: r() * W, h: (14 + r() * 46) * s, ph: r() * TAU, k: 1 + Math.floor(r() * 3) });
+  const motes = [];
+  for (let i = 0; i < 90; i++) motes.push({ x: 0.25 * W + r() * 0.7 * W, y: 0.15 * H + r() * 0.65 * H, ax: (10 + r() * 30) * s, ay: (8 + r() * 24) * s, a: 1 + Math.floor(r() * 2), b: 1 + Math.floor(r() * 2), p: r() * TAU, q: r() * TAU, rad: (0.8 + r() * 1.8) * s, tw: 1 + Math.floor(r() * 3) });
+  const mist1 = [], mist2 = [];
+  for (let i = 0; i < 9; i++) mist1.push({ x: r() * W, y: 0.6 * H + r() * 0.05 * H, rx: (260 + r() * 260) * s, ry: (40 + r() * 30) * s, p: r() * TAU, a: 0.35 + r() * 0.25 });
+  for (let i = 0; i < 9; i++) mist2.push({ x: r() * W, y: 0.78 * H + r() * 0.06 * H, rx: (300 + r() * 300) * s, ry: (50 + r() * 40) * s, p: r() * TAU, a: 0.3 + r() * 0.25 });
+  const rays = [];
+  for (let i = 0; i < 11; i++) rays.push({ ang: (100 + i * 9 + r() * 5) * Math.PI / 180, wid: (2 + r() * 3) * Math.PI / 180, k: 1 + Math.floor(r() * 3), p: r() * TAU });
+  return { far, mid, hill, near, treesA, treesB, treesC, framing, blades, motes, mist1, mist2, rays };
+})();
+
+function drawMorning(c, t) {
+  const ph = TAU * t / LOOP, sw = Math.sin(ph);
+  // Sky
+  let g = c.createLinearGradient(0, 0, 0, H * 0.75);
+  g.addColorStop(0, '#5e8fbd'); g.addColorStop(0.35, '#97bcd6'); g.addColorStop(0.62, '#d9e2dc'); g.addColorStop(1, '#f5e2bd');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  // Sun + glow
+  const sx = 0.7 * W, sy = 0.3 * H;
+  g = c.createRadialGradient(sx, sy, 0, sx, sy, 0.75 * H);
+  g.addColorStop(0, 'rgba(255,252,236,1)'); g.addColorStop(0.08, 'rgba(255,240,200,.9)');
+  g.addColorStop(0.25, 'rgba(255,224,170,.35)'); g.addColorStop(1, 'rgba(255,214,150,0)');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.fillStyle = 'rgba(255,253,244,1)';
+  c.beginPath(); c.arc(sx, sy, 0.05 * H * (1 + 0.015 * Math.sin(ph * 2)), 0, TAU); c.fill();
+  // Soft clouds
+  [[0.18, 0.14, 1], [0.42, 0.08, 0.8], [0.9, 0.12, 0.9], [0.62, 0.2, 0.6]].forEach(([x, y, k], i) => {
+    const cx = x * W + 40 * s * Math.sin(ph + i * 1.3);
+    for (let j = 0; j < 5; j++) softBlob(c, cx + (j - 2) * 55 * s * k, y * H + Math.sin(j * 2.1) * 10 * s, 90 * s * k, 30 * s * k, '255,255,255', 0.5);
+  });
+  // Birds (far)
+  birds(c, t, 23, 0.22 * H, 'rgba(40,52,48,.75)', 5, 1);
+  // Far mountains
+  c.save(); c.translate(4 * s * sw, 0);
+  g = c.createLinearGradient(0, 0.35 * H, 0, 0.7 * H);
+  g.addColorStop(0, '#9fb2c4'); g.addColorStop(1, '#cfd8da');
+  c.fillStyle = g; c.fill(M.far); c.restore();
+  // Haze
+  g = c.createLinearGradient(0, 0.45 * H, 0, 0.7 * H);
+  g.addColorStop(0, 'rgba(245,238,222,0)'); g.addColorStop(1, 'rgba(245,238,222,.55)');
+  c.fillStyle = g; c.fillRect(0, 0.45 * H, W, 0.25 * H);
+  // Mid ridge + far forest
+  c.save(); c.translate(9 * s * sw, 0);
+  c.fillStyle = '#8aa59f'; c.fill(M.mid);
+  c.fillStyle = '#6f9183'; c.fill(M.treesA);
+  c.restore();
+  // Mist 1
+  M.mist1.forEach(m => softBlob(c, m.x + 70 * s * Math.sin(ph + m.p), m.y, m.rx, m.ry, '240,242,236', m.a));
+  // Hill + mid forest
+  c.save(); c.translate(16 * s * sw, 0);
+  c.fillStyle = '#5b8565'; c.fill(M.hill);
+  c.fillStyle = '#3f6a4c'; c.fill(M.treesB);
+  c.restore();
+  // Light rays (screen blend)
+  c.save(); c.globalCompositeOperation = 'screen';
+  M.rays.forEach(ry => {
+    const a = 0.05 + 0.05 * (0.5 + 0.5 * Math.sin(ph * ry.k + ry.p));
+    const L2 = 1.6 * H;
+    const x1 = sx + Math.cos(ry.ang - ry.wid) * L2, y1 = sy + Math.sin(ry.ang - ry.wid) * L2;
+    const x2 = sx + Math.cos(ry.ang + ry.wid) * L2, y2 = sy + Math.sin(ry.ang + ry.wid) * L2;
+    const rg = c.createRadialGradient(sx, sy, 0, sx, sy, L2);
+    rg.addColorStop(0, `rgba(255,240,200,${a * 2})`); rg.addColorStop(1, 'rgba(255,240,200,0)');
+    c.fillStyle = rg;
+    c.beginPath(); c.moveTo(sx, sy); c.lineTo(x1, y1); c.lineTo(x2, y2); c.closePath(); c.fill();
+  });
+  c.restore();
+  // Mist 2
+  M.mist2.forEach(m => softBlob(c, m.x + 90 * s * Math.sin(ph + m.p), m.y, m.rx, m.ry, '226,234,224', m.a));
+  // Near forest + ground
+  c.save(); c.translate(26 * s * sw, 0);
+  c.fillStyle = '#1f3d2b'; c.fill(M.treesC);
+  c.fillStyle = '#183224'; c.fill(M.near);
+  c.restore();
+  // Dust motes in the light
+  M.motes.forEach(m => {
+    const x = m.x + m.ax * Math.sin(ph * m.a + m.p), y = m.y + m.ay * Math.sin(ph * m.b + m.q);
+    const a = clamp(0.25 + 0.55 * Math.sin(ph * m.tw + m.p), 0, 0.8);
+    softBlob(c, x, y, m.rad * 3, m.rad * 3, '255,236,180', a * 0.6);
+    c.fillStyle = `rgba(255,248,220,${a})`; c.beginPath(); c.arc(x, y, m.rad, 0, TAU); c.fill();
+  });
+  // Foreground framing trees, bending in the wind
+  c.save(); c.translate(44 * s * sw, 0);
+  c.fillStyle = '#0c1a12';
+  M.framing.forEach(f => {
+    const bend = 0.018 * Math.sin(ph * 2 + f.ph) + 0.008 * Math.sin(ph * 5 + f.ph * 2);
+    c.save(); c.transform(1, 0, bend, 1, f.x - bend * H, H); c.fill(f.path); c.restore();
+  });
+  c.restore();
+  // Grass blades
+  c.strokeStyle = '#0a150e'; c.lineWidth = 2.2 * s; c.lineCap = 'round';
+  c.beginPath();
+  M.blades.forEach(b => {
+    const tip = Math.sin(ph * b.k + b.ph) * 7 * s;
+    c.moveTo(b.x, H + 2); c.quadraticCurveTo(b.x + tip * 0.3, H - b.h * 0.6, b.x + tip, H - b.h);
+  });
+  c.stroke();
+  // Warm grade + vignette
+  c.save(); c.globalCompositeOperation = 'soft-light';
+  c.fillStyle = 'rgba(255,190,120,.18)'; c.fillRect(0, 0, W, H); c.restore();
+  vignette(c, 0.45);
+}
+
+/* ================= SUNSET LAKE ================= */
+const S = (() => {
+  const hy = Math.round(0.6 * H);
+  const pad = 80 * s;
+  const farFn = ridge(31, 0.40 * H, 0.09 * H, [1, 2, 3, 6]);
+  const midFn = ridge(33, 0.50 * H, 0.05 * H, [1, 2, 5]);
+  const far = ridgePath(farFn, pad), mid = ridgePath(midFn, pad);
+  const trees = forestPath(37, 260, [-pad, W + pad], [0.02 * H, 0.075 * H], () => hy, 0.004 * H);
+  const r = rng(41), reeds = [], flies = [], clouds = [];
+  [[-0.02, 0.2], [0.8, 1.03]].forEach(([a, b]) => {
+    for (let i = 0; i < 90; i++) reeds.push({ x: (a + r() * (b - a)) * W, h: (0.08 + r() * 0.26) * H, bend: (r() - 0.5) * 40 * s, ph: r() * TAU, k: 1 + Math.floor(r() * 2), w: (1.5 + r() * 2) * s, head: r() < 0.25 });
+  });
+  for (let i = 0; i < 40; i++) flies.push({ x: r() * W, y: (0.62 + r() * 0.36) * H, ax: (10 + r() * 40) * s, ay: (6 + r() * 20) * s, a: 1 + Math.floor(r() * 2), b: 1 + Math.floor(r() * 3), p: r() * TAU, tw: 2 + Math.floor(r() * 3) });
+  for (let i = 0; i < 7; i++) clouds.push({ x: r() * W, y: (0.12 + r() * 0.25) * H, rx: (180 + r() * 220) * s, ry: (10 + r() * 12) * s, p: r() * TAU });
+  return { hy, far, mid, trees, reeds, flies, clouds, upper: makeCanvas(W, hy) };
+})();
+
+function drawSunset(c, t) {
+  const ph = TAU * t / LOOP, sw = Math.sin(ph), hy = S.hy;
+  const u = S.upper.getContext('2d');
+  let g = u.createLinearGradient(0, 0, 0, hy);
+  g.addColorStop(0, '#2b2850'); g.addColorStop(0.35, '#74487a'); g.addColorStop(0.62, '#d9736c'); g.addColorStop(0.82, '#f4ab68'); g.addColorStop(1, '#fbd497');
+  u.fillStyle = g; u.fillRect(0, 0, W, hy);
+  const sx = 0.5 * W, sy = hy - 0.11 * H;
+  g = u.createRadialGradient(sx, sy, 0, sx, sy, 0.6 * H);
+  g.addColorStop(0, 'rgba(255,246,214,1)'); g.addColorStop(0.1, 'rgba(255,214,150,.85)'); g.addColorStop(0.35, 'rgba(255,160,100,.3)'); g.addColorStop(1, 'rgba(255,140,90,0)');
+  u.fillStyle = g; u.fillRect(0, 0, W, hy);
+  u.fillStyle = '#fff4d6'; u.beginPath(); u.arc(sx, sy, 0.06 * H * (1 + 0.012 * Math.sin(ph * 2)), 0, TAU); u.fill();
+  S.clouds.forEach(cl => softBlob(u, cl.x + 50 * s * Math.sin(ph + cl.p), cl.y, cl.rx, cl.ry, '255,190,170', 0.45));
+  birds(u, t, 43, 0.2 * H, 'rgba(30,20,40,.8)', 6, -1);
+  u.save(); u.translate(5 * s * sw, 0); u.fillStyle = '#6b4a68'; u.fill(S.far); u.restore();
+  g = u.createLinearGradient(0, 0.3 * H, 0, hy);
+  g.addColorStop(0, 'rgba(240,150,120,0)'); g.addColorStop(1, 'rgba(240,150,120,.35)');
+  u.fillStyle = g; u.fillRect(0, 0.3 * H, W, hy - 0.3 * H);
+  u.save(); u.translate(10 * s * sw, 0); u.fillStyle = '#463352'; u.fill(S.mid);
+  u.fillStyle = '#2a2036'; u.fill(S.trees); u.fillRect(-100, hy - 2 * s, W + 200, 4 * s); u.restore();
+  c.drawImage(S.upper, 0, 0);
+  // Lake: mirrored rows with ripple
+  const depth = H - hy;
+  for (let y = hy; y < H; y += 2) {
+    const d = (y - hy) / depth;
+    const src = clamp(hy - 1 - (y - hy) * 1.05, 0, hy - 2);
+    const off = (2 + 14 * d) * s * Math.sin((y - hy) * 0.09 / s * (1 - d * 0.4) - ph * 6);
+    c.drawImage(S.upper, 0, src, W, 2, off, y, W, 2);
+  }
+  g = c.createLinearGradient(0, hy, 0, H);
+  g.addColorStop(0, 'rgba(30,22,48,.2)'); g.addColorStop(1, 'rgba(14,10,24,.85)');
+  c.fillStyle = g; c.fillRect(0, hy, W, depth);
+  // Sun glitter
+  const r = rng(47);
+  for (let i = 0; i < 110; i++) {
+    const d = r(), y = hy + 4 * s + d * depth * 0.75, spread = (20 + d * 160) * s;
+    const x = sx + (r() - 0.5) * 2 * spread, len = (6 + r() * 30) * s * (0.4 + d);
+    const a = clamp(Math.sin(ph * (3 + Math.floor(r() * 4)) + r() * TAU), 0, 1) * (0.9 - d * 0.7);
+    c.fillStyle = `rgba(255,226,170,${a})`; c.fillRect(x - len / 2, y, len, 1.6 * s);
+  }
+  // Reeds
+  c.lineCap = 'round';
+  S.reeds.forEach(rd => {
+    const tip = rd.bend + Math.sin(ph * rd.k + rd.ph) * 10 * s;
+    c.strokeStyle = '#120d1a'; c.lineWidth = rd.w;
+    c.beginPath(); c.moveTo(rd.x, H + 4); c.quadraticCurveTo(rd.x + tip * 0.3, H - rd.h * 0.6, rd.x + tip, H - rd.h); c.stroke();
+    if (rd.head) { c.fillStyle = '#120d1a'; c.beginPath(); c.ellipse(rd.x + tip, H - rd.h, 3 * s, 11 * s, tip * 0.004, 0, TAU); c.fill(); }
+  });
+  // Fireflies
+  S.flies.forEach(f => {
+    const x = f.x + f.ax * Math.sin(ph * f.a + f.p), y = f.y + f.ay * Math.sin(ph * f.b + f.p * 1.3);
+    const a = clamp(Math.sin(ph * f.tw + f.p) * 1.2, 0, 1);
+    softBlob(c, x, y, 9 * s, 9 * s, '246,241,166', a * 0.55);
+    c.fillStyle = `rgba(252,250,210,${a})`; c.beginPath(); c.arc(x, y, 1.6 * s, 0, TAU); c.fill();
+  });
+  vignette(c, 0.5);
+}
+
+/* ================= PROMO (branded, with text) ================= */
+const PROMO_LEN = 26;
+const bufA = makeCanvas(W, H), bufB = makeCanvas(W, H);
+const logo = new Image(); logo.src = '../../assets/favicon.svg';
+function fadeWin(t, a, b, inD, outD) { return Math.min(ease((t - a) / inD), ease((b - t) / outD)); }
+function text(c, str, x, y, font, color, alpha, spacing, align) {
+  c.save(); c.globalAlpha = alpha; c.font = font; c.fillStyle = color;
+  c.textAlign = align || 'center'; c.textBaseline = 'middle';
+  c.letterSpacing = (spacing || 0) + 'px';
+  c.shadowColor = 'rgba(0,0,0,.45)'; c.shadowBlur = 24 * s;
+  c.fillText(str, x, y); c.restore();
+}
+function pill(c, str, x, y, alpha, fill, stroke, color) {
+  c.save(); c.globalAlpha = alpha;
+  c.font = `600 ${22 * s}px Inter`; c.letterSpacing = '1px';
+  const w = c.measureText(str).width + 44 * s, h = 52 * s;
+  c.beginPath(); c.roundRect(x - w / 2, y - h / 2, w, h, h / 2);
+  c.fillStyle = fill; c.fill(); c.lineWidth = 1.5 * s; c.strokeStyle = stroke; c.stroke();
+  c.fillStyle = color; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(str, x, y + 1 * s);
+  c.restore();
+}
+function scrim(c, alpha) {
+  const g = c.createRadialGradient(W / 2, H * 0.48, 0, W / 2, H * 0.48, W * 0.55);
+  g.addColorStop(0, `rgba(8,18,12,${0.45 * alpha})`); g.addColorStop(1, 'rgba(8,18,12,0)');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+}
+function drawPromo(c, t) {
+  const cx = W / 2, rise = k => (1 - ease(k)) * 30 * s;
+  // Background: morning → sunset crossfade around 15–17s
+  const mix = ease((t - 15) / 2);
+  if (mix < 1) drawMorning(bufA.getContext('2d'), t % LOOP);
+  if (mix > 0) drawSunset(bufB.getContext('2d'), t % LOOP);
+  if (mix < 1) c.drawImage(bufA, 0, 0);
+  if (mix > 0) { c.save(); c.globalAlpha = mix; c.drawImage(bufB, 0, 0); c.restore(); }
+
+  // 1 — Foundation intro
+  let a = fadeWin(t, 0.8, 6.0, 1.0, 0.6);
+  if (a > 0) {
+    scrim(c, a);
+    text(c, 'ROYALTY NEXUS FOUNDATION TRUST', cx, H * 0.33 + rise((t - 0.8) / 1), `600 ${22 * s}px Inter`, '#f3ead2', a, 7 * s);
+    text(c, 'Rooted in nature.', cx, H * 0.45 + rise((t - 1.1) / 1), `700 ${96 * s}px "Cormorant Garamond"`, '#ffffff', fadeWin(t, 1.1, 6.0, 1.0, 0.6));
+    text(c, 'Growing with purpose.', cx, H * 0.58 + rise((t - 1.6) / 1), `italic 500 ${92 * s}px "Cormorant Garamond"`, '#fdf0cf', fadeWin(t, 1.6, 6.0, 1.0, 0.6));
+  }
+  // 2 — Campaigns
+  a = fadeWin(t, 6.4, 10.9, 0.8, 0.6);
+  if (a > 0) {
+    scrim(c, a);
+    text(c, 'PUBLIC ENVIRONMENTAL CAMPAIGNS', cx, H * 0.32 + rise((t - 6.4) / 0.8), `600 ${22 * s}px Inter`, '#cfe6c9', a, 7 * s);
+    text(c, 'Forests · Rivers · Coastlines', cx, H * 0.45 + rise((t - 6.7) / 0.9), `700 ${84 * s}px "Cormorant Garamond"`, '#ffffff', fadeWin(t, 6.7, 10.9, 0.9, 0.6));
+    ['In the field', 'Online', 'Hybrid'].forEach((p, i) => {
+      const t0 = 7.6 + i * 0.35, k = ease((t - t0) / 0.5);
+      pill(c, p, cx + (i - 1) * 230 * s, H * 0.6 + (1 - k) * 20 * s, Math.min(k, a), 'rgba(18,38,27,.55)', 'rgba(207,230,201,.7)', '#f3ead2');
+    });
+    text(c, 'Free and open to everyone', cx, H * 0.71, `400 ${26 * s}px Inter`, '#e9e4d6', fadeWin(t, 8.6, 10.9, 0.8, 0.6));
+  }
+  // 3 — How it works
+  a = fadeWin(t, 11.2, 15.3, 0.8, 0.6);
+  if (a > 0) {
+    scrim(c, a);
+    text(c, 'HOW TO TAKE PART', cx, H * 0.3, `600 ${22 * s}px Inter`, '#cfe6c9', a, 7 * s);
+    ['Register', 'Participate', 'Get certified'].forEach((step, i) => {
+      const t0 = 11.6 + i * 0.6, k = ease((t - t0) / 0.6), al = Math.min(k, a);
+      const x = cx + (i - 1) * 420 * s, y = H * 0.5 + (1 - k) * 24 * s;
+      c.save(); c.globalAlpha = al;
+      c.beginPath(); c.arc(x, y - 40 * s, 34 * s, 0, TAU); c.fillStyle = '#3f8a5c'; c.fill();
+      c.restore();
+      text(c, String(i + 1), x, y - 38 * s, `700 ${40 * s}px "Cormorant Garamond"`, '#ffffff', al);
+      text(c, step, x, y + 40 * s, `700 ${56 * s}px "Cormorant Garamond"`, '#ffffff', al);
+    });
+    text(c, 'Every participant receives a verifiable certificate', cx, H * 0.7, `400 ${26 * s}px Inter`, '#e9e4d6', fadeWin(t, 13.4, 15.3, 0.7, 0.6));
+  }
+  // 4 — Private wealth (over sunset)
+  a = fadeWin(t, 16.4, 21.0, 0.9, 0.6);
+  if (a > 0) {
+    scrim(c, a);
+    text(c, 'ROYALTY NEXUS PRIVATE WEALTH', cx, H * 0.33 + rise((t - 16.4) / 0.9), `600 ${22 * s}px Inter`, '#e2c98f', a, 7 * s);
+    text(c, 'Stewardship for generations.', cx, H * 0.46 + rise((t - 16.8) / 1), `700 ${92 * s}px "Cormorant Garamond"`, '#ffffff', fadeWin(t, 16.8, 21.0, 1.0, 0.6));
+    text(c, 'Wealth planning · Investment management · Family office · Impact investing', cx, H * 0.6, `400 ${26 * s}px Inter`, '#f1e6cf', fadeWin(t, 17.6, 21.0, 0.9, 0.6));
+  }
+  // 5 — End card
+  a = ease((t - 21.3) / 1.0);
+  if (a > 0) {
+    c.save(); c.globalAlpha = a * 0.55; c.fillStyle = '#0b1219'; c.fillRect(0, 0, W, H); c.restore();
+    const k = ease((t - 21.3) / 1.2);
+    if (logo.complete) { c.save(); c.globalAlpha = a; const sz = 130 * s; c.drawImage(logo, cx - sz / 2, H * 0.27 - sz / 2 + (1 - k) * 20 * s, sz, sz); c.restore(); }
+    c.save(); c.globalAlpha = a; c.font = `700 ${100 * s}px "Cormorant Garamond"`; c.textBaseline = 'middle';
+    const w1 = c.measureText('Royalty ').width, w2 = c.measureText('Nexus').width, x0 = cx - (w1 + w2) / 2;
+    c.shadowColor = 'rgba(0,0,0,.4)'; c.shadowBlur = 20 * s;
+    c.fillStyle = '#ffffff'; c.fillText('Royalty ', x0, H * 0.47); c.fillStyle = '#e2c98f'; c.fillText('Nexus', x0 + w1, H * 0.47);
+    c.restore();
+    text(c, 'Foundation Trust  ·  Private Wealth', cx, H * 0.57, `500 ${26 * s}px Inter`, '#e9e4d6', ease((t - 21.8) / 0.8), 2 * s);
+    const kb = ease((t - 22.4) / 0.8);
+    pill(c, 'Join a campaign  →  royaltynexus.com', cx, H * 0.7 + (1 - kb) * 16 * s, kb, 'rgba(63,138,92,.95)', 'rgba(255,255,255,.25)', '#ffffff');
+  }
+  // Fade from / to black
+  const black = Math.max(1 - ease(t / 1.2), ease((t - (PROMO_LEN - 0.9)) / 0.9));
+  if (black > 0) { c.fillStyle = `rgba(0,0,0,${black})`; c.fillRect(0, 0, W, H); }
+}
+
+window.render = t => {
+  if (MODE === 'morning') drawMorning(ctx, t);
+  else if (MODE === 'sunset') drawSunset(ctx, t);
+  else drawPromo(ctx, t);
+};
+const FACES = ['700 40px "Cormorant Garamond"', '600 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '400 20px Inter', '500 20px Inter', '600 20px Inter'];
+window.ready = Promise.all([...FACES.map(f => document.fonts.load(f)), document.fonts.ready, new Promise(r => { if (MODE !== 'promo' || logo.complete) r(); else { logo.onload = r; logo.onerror = r; } })]);
+</script>
+</body>
+</html>

@@ -1,5 +1,9 @@
 # Background video
 
+The clips currently here are Royalty Nexus motion-graphic loops rendered by
+`tools/motion/` (20 s, 1280×720, seamless loop). Replace them with real
+footage whenever you have it; keep the same file names.
+
 Drop looping forest clips here and the scenes play them automatically.
 Each scene tries `.webm` first, then `.mp4`. Without a clip, the scene shows
 the photo from `assets/photos/` (if any), then the drawn landscape.

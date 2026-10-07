@@ -3,6 +3,10 @@
 The site uses these files automatically. Until a file is here, that scene
 shows the drawn landscape instead.
 
+The files currently here are stills from the Royalty Nexus motion-graphic
+loops (see `tools/motion/`). Replace them with real photography whenever you
+have it; keep the same file names.
+
 | File | Where it appears | What works best |
 |---|---|---|
 | `forest-hero.jpg` | Homepage hero | Misty forest or sunlight through tall trees, landscape, bright upper-right area for the sun rays |

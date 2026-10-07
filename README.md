@@ -61,4 +61,6 @@ Put photos in `assets/photos/` (`forest-hero.jpg`, `forest-lake.jpg`, `forest-ca
 
 For moving footage, put looping clips in `assets/video/` (`forest-hero.webm`/`.mp4`, `forest-lake.webm`/`.mp4`). A clip plays muted in the background with the same overlays and takes priority over the photo. See `assets/video/README.md`.
 
+The site currently ships with motion-graphic forest loops and matching stills, rendered by `tools/motion/`. That tool also makes a 26-second branded promo video. See `tools/motion/README.md` to re-render or edit them.
+
 Motion is turned off automatically for visitors who have `prefers-reduced-motion` set.
