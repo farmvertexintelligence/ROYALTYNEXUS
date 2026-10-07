@@ -8,7 +8,7 @@ It's plain HTML, CSS and JavaScript. There's no build step and no dependencies.
 
 | Page | What it does |
 |---|---|
-| `index.html` | Homepage for the foundation: mission and three pillars, the four-step wealth stewardship process, programmes, 2030 targets, governance rules, ways to give (with links to campaign registration) and a contact form. Contact form messages are saved as **Wealth enquiries** in the admin console. All styles and scripts for this page are inline in the file. |
+| `index.html` | Homepage for the foundation: mission and three pillars, the four-step wealth stewardship process, programmes, 2030 targets, governance rules, ways to give (with links to campaign registration) and a contact form. Contact form messages are saved as **Wealth enquiries** in the admin console. It uses a glassmorphism design, and all its styles and scripts are inline in the file. |
 | `register.html` | Public campaign registration. Picks the campaign from `?c=<id>`, offers in-person or online depending on the campaign, checks capacity and duplicate emails, and issues a registration ID. |
 | `verify.html` | Public certificate check (`?id=RN-2026-XXXXXX`). Shows the certificate and whether it's valid or revoked, and it can be printed or saved as a PDF. |
 | `admin/login.html` | Administrator sign-in. |
@@ -57,6 +57,6 @@ assets/     favicon.svg
 
 ## Photos and video
 
-The registration and certificate pages use `assets/photos/forest-canopy.jpg` behind their header (see `assets/photos/README.md`). The homepage is intentionally simple and uses no photos or video. The hero and lake photos, the clips in `assets/video/` and the renderer in `tools/motion/` are kept in case you want to bring a photo or video background back to the homepage.
+The homepage hero plays `assets/video/forest-hero.webm`/`.mp4` (with `assets/photos/forest-hero.jpg` as the still), and its stewardship and get-involved sections use `forest-lake.jpg` and `forest-hero.jpg` behind frosted-glass panels. The registration and certificate pages use `forest-canopy.jpg` behind their header. Swap any of these files for real photography with the same names; see `assets/photos/README.md` and `assets/video/README.md`. `tools/motion/` re-renders the motion-graphic clips.
 
 Motion is turned off automatically for visitors who have `prefers-reduced-motion` set.
